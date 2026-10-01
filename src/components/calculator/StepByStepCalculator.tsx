@@ -147,14 +147,26 @@ export const StepByStepCalculator: React.FC<Props> = ({
 
   const handleQuoteSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newSubmission = {
+      id: 'quote_' + Date.now(),
+      timestamp: new Date().toISOString(),
+      serviceType: serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping',
+      calculation,
+      inputs: serviceType === 'smallBusiness' ? sbState : pmState,
+      contact: quoteFormData,
+    };
+
+    try {
+      const existing = JSON.parse(localStorage.getItem('bookkeep_quotes') || '[]');
+      existing.unshift(newSubmission);
+      localStorage.setItem('bookkeep_quotes', JSON.stringify(existing));
+    } catch (err) {
+      console.warn('LocalStorage save error', err);
+    }
+
     setQuoteSubmitted(true);
     if (onRequestQuoteWithDetails) {
-      onRequestQuoteWithDetails({
-        serviceType: serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping',
-        calculation,
-        inputs: serviceType === 'smallBusiness' ? sbState : pmState,
-        contact: quoteFormData,
-      });
+      onRequestQuoteWithDetails(newSubmission);
     }
   };
 

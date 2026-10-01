@@ -86,6 +86,18 @@ export const TaxConsultantWebsite: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newBooking = {
+      id: 'booking_' + Date.now(),
+      timestamp: new Date().toISOString(),
+      ...formData,
+    };
+    try {
+      const existing = JSON.parse(localStorage.getItem('bookkeep_bookings') || '[]');
+      existing.unshift(newBooking);
+      localStorage.setItem('bookkeep_bookings', JSON.stringify(existing));
+    } catch (err) {
+      console.warn('LocalStorage save error', err);
+    }
     setIsSubmitted(true);
   };
 
