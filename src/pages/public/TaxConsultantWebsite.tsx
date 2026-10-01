@@ -371,17 +371,17 @@ export const TaxConsultantWebsite: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Dark Card 1: Behind on paperwork */}
+            {/* Dark Card 1: Disorganized Books */}
             <div className="bg-[#121212] text-white p-7 rounded-3xl border border-neutral-800 shadow-xl space-y-6 flex flex-col justify-between hover-lift transition-all reveal-blur reveal-delay-100">
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                  Disorganized Books
+                  Disorganized Ledgers
                 </span>
                 <h3 className="font-serif text-xl font-medium text-neutral-100">
-                  Behind on paperwork
+                  Behind on reconciliations
                 </h3>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Receipts scattered across folders, unpaid invoices untracked, and reconciliations pending for months.
+                  Receipts scattered across folders, unpaid bills untracked, and bank feeds un-reconciled for multiple months.
                 </p>
               </div>
 
@@ -405,57 +405,57 @@ export const TaxConsultantWebsite: React.FC = () => {
               </div>
             </div>
 
-            {/* Dark Card 2: Unsure what you owe */}
+            {/* Dark Card 2: Financial Blindspots */}
             <div className="bg-[#121212] text-white p-7 rounded-3xl border border-neutral-800 shadow-xl space-y-6 flex flex-col justify-between hover-lift transition-all reveal-blur reveal-delay-200">
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                  Tax Blindspots
+                  Profit Blindspots
                 </span>
                 <h3 className="font-serif text-xl font-medium text-neutral-100">
-                  Unsure what you owe
+                  Unsure about real profit & cash flow
                 </h3>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Quarterly tax estimates feeling like pure guesswork, leading to nasty year-end tax surprises.
+                  Operating without monthly Balance Sheet and P&L reports, leaving you in the dark about business margins.
                 </p>
               </div>
 
               {/* Mockup Grid / Calendar UI */}
               <div className="bg-[#1C1C1C] p-4 rounded-2xl border border-neutral-800 space-y-2">
                 <div className="flex items-center justify-between text-[11px] text-neutral-300">
-                  <span>Quarterly Tax Forecast</span>
-                  <span className="text-emerald-400">Accurate</span>
+                  <span>Monthly Financial Packets</span>
+                  <span className="text-emerald-400">Delivered</span>
                 </div>
                 <div className="grid grid-cols-4 gap-1.5 pt-1">
-                  <div className="bg-neutral-800 p-2 rounded-lg text-center text-[10px] text-neutral-300 hover:bg-neutral-700 transition-colors">Q1: $4.2K</div>
-                  <div className="bg-neutral-800 p-2 rounded-lg text-center text-[10px] text-neutral-300 hover:bg-neutral-700 transition-colors">Q2: $5.1K</div>
-                  <div className="bg-neutral-800 p-2 rounded-lg text-center text-[10px] text-neutral-300 hover:bg-neutral-700 transition-colors">Q3: $4.8K</div>
-                  <div className="bg-white text-black font-bold p-2 rounded-lg text-center text-[10px] shadow-sm">Q4: Ready</div>
+                  <div className="bg-neutral-800 p-2 rounded-lg text-center text-[10px] text-neutral-300 hover:bg-neutral-700 transition-colors">P&L: Ready</div>
+                  <div className="bg-neutral-800 p-2 rounded-lg text-center text-[10px] text-neutral-300 hover:bg-neutral-700 transition-colors">Balance Sheet</div>
+                  <div className="bg-neutral-800 p-2 rounded-lg text-center text-[10px] text-neutral-300 hover:bg-neutral-700 transition-colors">AP/AR Aging</div>
+                  <div className="bg-white text-black font-bold p-2 rounded-lg text-center text-[10px] shadow-sm">Audit-Proof</div>
                 </div>
               </div>
             </div>
 
-            {/* Dark Card 3: Dreading tax season */}
+            {/* Dark Card 3: Property Accounting Gaps */}
             <div className="bg-[#121212] text-white p-7 rounded-3xl border border-neutral-800 shadow-xl space-y-6 flex flex-col justify-between hover-lift transition-all reveal-blur reveal-delay-300">
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
-                  Filing Fatigue
+                  Property Management Gaps
                 </span>
                 <h3 className="font-serif text-xl font-medium text-neutral-100">
-                  Dreading tax season
+                  Trust & owner ledger headaches
                 </h3>
                 <p className="text-xs text-neutral-400 leading-relaxed">
-                  Scrambling every April with urgent accountant requests and late filing penalties.
+                  AppFolio or Buildium ledger discrepancies, unallocated security deposits, and delayed owner distributions.
                 </p>
               </div>
 
               {/* Mockup Gauge UI */}
               <div className="bg-[#1C1C1C] p-4 rounded-2xl border border-neutral-800 flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] text-neutral-400 uppercase tracking-wider">Anxiety Reduced</div>
-                  <div className="text-lg font-bold text-white mt-0.5">0 Penalties</div>
+                  <div className="text-[10px] text-neutral-400 uppercase tracking-wider">Trust Reconciled</div>
+                  <div className="text-lg font-bold text-white mt-0.5">3-Way Matched</div>
                 </div>
                 <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center font-serif text-sm font-bold text-white shadow-inner">
-                  96%
+                  100%
                 </div>
               </div>
             </div>
@@ -570,9 +570,9 @@ export const TaxConsultantWebsite: React.FC = () => {
             {/* Step 03 */}
             <div className="space-y-4 border-t border-slate-200 pt-6 reveal-blur reveal-delay-300">
               <span className="font-serif text-4xl sm:text-5xl text-slate-300 font-light block">03</span>
-              <h3 className="font-serif text-xl font-bold text-black">Stop worrying about taxes</h3>
+              <h3 className="font-serif text-xl font-bold text-black">Audit-ready books every month</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Monthly reports delivered like clockwork, returns filed early, and zero surprises from tax authorities.
+                Monthly P&L, balance sheets, and bank reconciliations delivered on time like clockwork with zero stress.
               </p>
             </div>
           </div>
