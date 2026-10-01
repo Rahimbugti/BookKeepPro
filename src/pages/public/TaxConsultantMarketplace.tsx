@@ -232,7 +232,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
                 {/* ── Inside Website Display: Top Navbar ── */}
                 <div className="bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
                   <div className="font-serif font-bold text-lg text-slate-900 tracking-tight flex items-center gap-2">
-                    <span>Lindqvist & Co.</span>
+                    <span>BookKeepPro</span>
                   </div>
                   <div className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-600">
                     <span className="hover:text-slate-900 cursor-pointer">Services</span>
@@ -653,7 +653,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
             <div className="flex items-center gap-4">
               <span className="font-bold text-white flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live Preview: Tax Consultant (Lindqvist & Co.)
+                Live Preview: Bookkeeping Practice (BookKeepPro)
               </span>
               <span className="text-slate-500">|</span>
               <div className="flex items-center gap-1 bg-[#1A1A22] p-1 rounded-lg border border-[#282834]">
@@ -723,7 +723,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
               {/* Inside Website Live Header */}
               <div className="sticky top-0 bg-white/95 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between z-30">
                 <div className="font-serif font-bold text-xl text-slate-900 tracking-tight">
-                  Lindqvist & Co.
+                  BookKeepPro
                 </div>
                 <div className="flex items-center gap-4 text-xs font-semibold">
                   <a href="mailto:nexa@gmail.com" className="text-slate-600 hover:text-slate-900 hidden sm:inline">
@@ -743,15 +743,15 @@ export const TaxConsultantMarketplace: React.FC = () => {
               <div className="p-6 sm:p-14 space-y-16">
                 <div className="max-w-3xl space-y-6">
                   <span className="text-xs font-bold uppercase tracking-widest text-slate-400 block">
-                    Boutique Tax & Accounting Advisory
+                    Boutique Bookkeeping & Accounting Practice
                   </span>
                   <h1 className="font-serif text-4xl sm:text-6xl font-bold text-slate-900 tracking-tight leading-[1.1]">
-                    Taxes, handled.
+                    Accurate books.
                     <br />
-                    You get back to business.
+                    Zero stress for your business.
                   </h1>
                   <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl">
-                    For freelancers, small firms, and growing companies — we file, we plan, and we deal with the tax office. You stop worrying about it.
+                    Specialized bookkeeping for small businesses, agencies, and property management companies. We handle reconciliations, trust accounting, and historical cleanups.
                   </p>
 
                   <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -840,7 +840,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
 
                 {/* Footer in Preview */}
                 <div className="pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-                  <span className="font-serif font-bold text-slate-900">Lindqvist & Co.</span>
+                  <span className="font-serif font-bold text-slate-900">BookKeepPro</span>
                   <div className="flex items-center gap-4">
                     <a href="mailto:nexa@gmail.com" className="hover:text-slate-900">nexa@gmail.com</a>
                     <span>•</span>
@@ -862,7 +862,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-bold text-[#0099FF] uppercase tracking-widest block">
-                  Lindqvist & Co. Consultation
+                  BookKeepPro Consultation
                 </span>
                 <h3 className="font-serif text-xl font-bold text-slate-900">Book an Intro Call</h3>
               </div>
@@ -902,7 +902,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Alexander Lindqvist"
+                    placeholder="e.g. John Doe"
                     value={callFormData.name}
                     onChange={(e) => setCallFormData({ ...callFormData, name: e.target.value })}
                     className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-[#0099FF]"

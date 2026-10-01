@@ -121,6 +121,57 @@ export const PRICING_CONFIG = {
         range: { min: 1800, max: 2800 },
       },
     } as Record<string, { label: string; range: PriceRangeUSD }>,
+
+    scopeOfWork: [
+      {
+        id: 'monthlyReconciliation',
+        label: 'Bank & Credit Card Reconciliation',
+        description: 'Monthly matching of all bank and credit card accounts with general ledger',
+        priceRange: { min: 50, max: 100 },
+      },
+      {
+        id: 'transactionCategorization',
+        label: 'Transaction Categorization & Coding',
+        description: 'Accurate GAAP revenue and expense classification across all feeds',
+        priceRange: { min: 40, max: 80 },
+      },
+      {
+        id: 'accountsPayable',
+        label: 'Accounts Payable & Bill Tracking',
+        description: 'Vendor bill entry, payment scheduling, and accounts payable aging',
+        priceRange: { min: 60, max: 120 },
+      },
+      {
+        id: 'accountsReceivable',
+        label: 'Accounts Receivable & Invoicing',
+        description: 'Customer invoicing, payment receipt recording, and receivables tracking',
+        priceRange: { min: 60, max: 120 },
+      },
+      {
+        id: 'financialStatements',
+        label: 'Monthly Financial Statements',
+        description: 'Balance Sheet, Profit & Loss, and Cash Flow delivered every month',
+        priceRange: { min: 70, max: 140 },
+      },
+      {
+        id: 'quickbooksSupport',
+        label: 'QuickBooks Online / Xero Support',
+        description: 'Chart of accounts maintenance, automated rule creation, and software optimization',
+        priceRange: { min: 50, max: 90 },
+      },
+      {
+        id: 'payrollJournal',
+        label: 'Payroll Journal & Reconciliation',
+        description: 'Recording payroll entries from Gusto, ADP, or QuickBooks Payroll',
+        priceRange: { min: 50, max: 100 },
+      },
+      {
+        id: 'yearEnd1099',
+        label: 'Year-End 1099 Contractor Prep',
+        description: 'Vendor W-9 collection tracking and 1099-NEC filing preparation',
+        priceRange: { min: 60, max: 110 },
+      },
+    ] as ScopeOption[],
   },
 
   // ── 3. PROPERTY MANAGEMENT BOOKKEEPING CONFIG ──

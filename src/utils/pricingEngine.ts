@@ -55,6 +55,7 @@ export interface SmallBusinessInputs {
   bankAccounts: number;
   creditCards: number;
   cleanupDuration?: string; // '1-month' | '2-3-months' | '4-6-months' | '7-12-months' | '12-plus-months'
+  selectedScopeIds?: string[]; // ids matching PRICING_CONFIG.smallBusiness.scopeOfWork
 }
 
 export function calculateSmallBusinessRange(
@@ -142,6 +143,28 @@ export function calculateSmallBusinessRange(
         maxFormatted: formatCurrencyAmount(cleanupTier.range.max, currencyCode),
       });
     }
+  }
+
+  // Optional scope selections for Small Business
+  if (inputs.selectedScopeIds && inputs.selectedScopeIds.length > 0) {
+    const scopeMap = new Map(cfg.scopeOfWork.map((s) => [s.id, s]));
+    inputs.selectedScopeIds.forEach((scopeId) => {
+      const scopeItem = scopeMap.get(scopeId);
+      if (scopeItem) {
+        // We include specific modular additions beyond base
+        if (['payrollJournal', 'yearEnd1099', 'accountsPayable', 'accountsReceivable'].includes(scopeId)) {
+          minUSD += scopeItem.priceRange.min;
+          maxUSD += scopeItem.priceRange.max;
+        }
+        breakdown.push({
+          label: `Scope: ${scopeItem.label}`,
+          minUSD: scopeItem.priceRange.min,
+          maxUSD: scopeItem.priceRange.max,
+          minFormatted: formatCurrencyAmount(scopeItem.priceRange.min, currencyCode),
+          maxFormatted: formatCurrencyAmount(scopeItem.priceRange.max, currencyCode),
+        });
+      }
+    });
   }
 
   return {

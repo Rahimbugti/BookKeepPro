@@ -49,6 +49,12 @@ export const StepByStepCalculator: React.FC<Props> = ({
     bankAccounts: 1,
     creditCards: 0,
     cleanupDuration: '2-3-months',
+    selectedScopeIds: [
+      'monthlyReconciliation',
+      'transactionCategorization',
+      'financialStatements',
+      'quickbooksSupport',
+    ],
   });
 
   // Property Management Form State
@@ -92,6 +98,12 @@ export const StepByStepCalculator: React.FC<Props> = ({
       bankAccounts: 1,
       creditCards: 0,
       cleanupDuration: '2-3-months',
+      selectedScopeIds: [
+        'monthlyReconciliation',
+        'transactionCategorization',
+        'financialStatements',
+        'quickbooksSupport',
+      ],
     });
     setPmState({
       unitTier: '1-10',
@@ -109,20 +121,28 @@ export const StepByStepCalculator: React.FC<Props> = ({
   };
 
   const toggleScopeItem = (scopeId: string) => {
-    setPmState((prev) => {
-      const exists = prev.selectedScopeIds.includes(scopeId);
-      if (exists) {
+    if (serviceType === 'smallBusiness') {
+      setSbState((prev) => {
+        const currentIds = prev.selectedScopeIds || [];
+        const exists = currentIds.includes(scopeId);
         return {
           ...prev,
-          selectedScopeIds: prev.selectedScopeIds.filter((id) => id !== scopeId),
+          selectedScopeIds: exists
+            ? currentIds.filter((id) => id !== scopeId)
+            : [...currentIds, scopeId],
         };
-      } else {
+      });
+    } else {
+      setPmState((prev) => {
+        const exists = prev.selectedScopeIds.includes(scopeId);
         return {
           ...prev,
-          selectedScopeIds: [...prev.selectedScopeIds, scopeId],
+          selectedScopeIds: exists
+            ? prev.selectedScopeIds.filter((id) => id !== scopeId)
+            : [...prev.selectedScopeIds, scopeId],
         };
-      }
-    });
+      });
+    }
   };
 
   const handleQuoteSubmit = (e: React.FormEvent) => {
@@ -635,20 +655,19 @@ export const StepByStepCalculator: React.FC<Props> = ({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {PRICING_CONFIG.propertyManagement.scopeOfWork.map((scope) => {
+              {(serviceType === 'smallBusiness'
+                ? PRICING_CONFIG.smallBusiness.scopeOfWork
+                : PRICING_CONFIG.propertyManagement.scopeOfWork
+              ).map((scope) => {
                 const isSelected =
-                  serviceType === 'propertyManagement'
-                    ? pmState.selectedScopeIds.includes(scope.id)
-                    : true; // Small business bundles core deliverables
+                  serviceType === 'smallBusiness'
+                    ? (sbState.selectedScopeIds || []).includes(scope.id)
+                    : pmState.selectedScopeIds.includes(scope.id);
 
                 return (
                   <div
                     key={scope.id}
-                    onClick={() => {
-                      if (serviceType === 'propertyManagement') {
-                        toggleScopeItem(scope.id);
-                      }
-                    }}
+                    onClick={() => toggleScopeItem(scope.id)}
                     className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
                       isSelected
                         ? 'bg-blue-50/60 border-blue-500 shadow-xs'
