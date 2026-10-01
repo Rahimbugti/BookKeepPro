@@ -21,6 +21,14 @@ export const SUPPORTED_CURRENCIES: Record<string, CurrencyConfig> = {
     flag: '🇺🇸',
     exchangeRate: 1.0,
   },
+  PKR: {
+    code: 'PKR',
+    name: 'Pakistani Rupee',
+    country: 'Pakistan',
+    symbol: 'Rs ',
+    flag: '🇵🇰',
+    exchangeRate: 278.0,
+  },
   CAD: {
     code: 'CAD',
     name: 'Canadian Dollar',
