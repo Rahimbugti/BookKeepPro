@@ -54,11 +54,30 @@ export function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     if (email) {
       setSubscribed(true);
+      const emailToSend = email;
       setEmail('');
+      try {
+        await fetch('https://formspree.io/f/mbglvrkg', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: emailToSend,
+            _replyto: emailToSend,
+            _subject: `New Newsletter Subscriber: ${emailToSend}`,
+            subscriptionType: 'BookKeepPro Newsletter',
+            submittedAt: new Date().toLocaleString(),
+          }),
+        });
+      } catch (err) {
+        console.error('Footer subscribe error:', err);
+      }
     }
   };
 
