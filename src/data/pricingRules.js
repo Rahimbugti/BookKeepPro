@@ -1,5 +1,5 @@
 /**
- * Exact pricing rules and rate cards for LedgerSync Bookkeeping.
+ * Exact pricing rules and rate cards for BookKeepPro Bookkeeping.
  * Centralized and modular for easy adjustment.
  */
 

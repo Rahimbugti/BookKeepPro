@@ -73,10 +73,10 @@ export function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#E60050] to-[#FF457E] flex items-center justify-center">
-                <span className="font-heading font-black text-white text-sm">LS</span>
+                <span className="font-heading font-black text-white text-sm">BKP</span>
               </div>
               <div className="font-heading font-black text-xl text-white tracking-tight">
-                LEDGER<span className="text-[#E60050]">SYNC</span>
+                BOOKKEEP<span className="text-[#E60050]">PRO</span>
               </div>
             </div>
             <p className="text-xs text-gray-400 leading-relaxed max-w-sm">
@@ -153,7 +153,7 @@ export function Footer() {
 
         {/* Bottom Copyright Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} LedgerSync Financial Solutions LLC. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} BookKeepPro Financial Solutions LLC. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a>
             <a href="#terms" className="hover:text-white transition-colors">Terms of Service</a>

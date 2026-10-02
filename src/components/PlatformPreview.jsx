@@ -9,7 +9,7 @@ export function PlatformPreview({ onGetStarted }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-8 text-center">
         {/* Title */}
         <h2 className="font-heading text-2xl sm:text-4xl font-black text-[#0E0E0E] tracking-tight max-w-3xl mx-auto leading-tight">
-          See How the LedgerSync Platform Helps You Reconcile, Manage, and Scale Your Financials
+          See How the BookKeepPro Platform Helps You Reconcile, Manage, and Scale Your Financials
         </h2>
 
         {/* Dashboard Browser Frame Mockup */}
@@ -22,7 +22,7 @@ export function PlatformPreview({ onGetStarted }) {
               <span className="w-3 h-3 rounded-full bg-emerald-500 inline-block" />
             </div>
             <div className="bg-gray-100 rounded-lg px-4 py-1 text-xs font-mono text-gray-500">
-              app.ledgersync.com/dashboard
+              app.bookkeeppro.com/dashboard
             </div>
             <div className="w-12" />
           </div>
@@ -31,10 +31,10 @@ export function PlatformPreview({ onGetStarted }) {
           <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 p-6 sm:p-10 relative">
             <div className="max-w-md mx-auto text-center space-y-4">
               <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#E60050] to-[#FF457E] text-white flex items-center justify-center font-heading font-black text-2xl mx-auto shadow-xl shadow-pink-500/20">
-                LS
+                BKP
               </div>
               <h3 className="font-heading text-xl sm:text-2xl font-black text-gray-900">
-                LEDGERSYNC SOLUTIONS
+                BOOKKEEPPRO SOLUTIONS
               </h3>
               <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
                 Automated Bank Ingestion • 3-Way Trust Reconciliations • AppFolio & Buildium Sync • Month-End Financial Reporting

@@ -340,7 +340,7 @@ export const TaxConsultantWebsite: React.FC = () => {
               title="Click to view QuickBooks Solutions for Small Business"
               className="group flex items-center gap-2 font-semibold text-xs text-slate-800 opacity-80 hover:opacity-100 transition-all duration-300 hover:scale-105 px-3 py-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer text-left reveal-blur reveal-delay-100 shadow-sm hover:shadow"
             >
-              <Shield className="w-4 h-4 text-emerald-600 transition-transform duration-300 group-hover:rotate-6" />
+              <Shield className="w-4 h-4 text-black transition-transform duration-300 group-hover:rotate-6" />
               <span>QuickBooks ProAdvisor</span>
               <ArrowRight className="w-3 h-3 text-slate-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
             </button>
@@ -351,7 +351,7 @@ export const TaxConsultantWebsite: React.FC = () => {
               title="Click to view Xero Cloud Solutions for Small Business"
               className="group flex items-center gap-2 font-semibold text-xs text-slate-800 opacity-80 hover:opacity-100 transition-all duration-300 hover:scale-105 px-3 py-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer text-left reveal-blur reveal-delay-200 shadow-sm hover:shadow"
             >
-              <Layers className="w-4 h-4 text-sky-600 transition-transform duration-300 group-hover:rotate-6" />
+              <Layers className="w-4 h-4 text-black transition-transform duration-300 group-hover:rotate-6" />
               <span>Xero Platinum Partner</span>
               <ArrowRight className="w-3 h-3 text-slate-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
             </button>
@@ -362,7 +362,7 @@ export const TaxConsultantWebsite: React.FC = () => {
               title="Click to view AppFolio Property Management Services"
               className="group flex items-center gap-2 font-semibold text-xs text-slate-800 opacity-80 hover:opacity-100 transition-all duration-300 hover:scale-105 px-3 py-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer text-left reveal-blur reveal-delay-300 shadow-sm hover:shadow"
             >
-              <Building2 className="w-4 h-4 text-indigo-600 transition-transform duration-300 group-hover:rotate-6" />
+              <Building2 className="w-4 h-4 text-black transition-transform duration-300 group-hover:rotate-6" />
               <span>AppFolio Certified</span>
               <ArrowRight className="w-3 h-3 text-slate-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
             </button>
@@ -373,7 +373,7 @@ export const TaxConsultantWebsite: React.FC = () => {
               title="Click to view Buildium Accounting Services"
               className="group flex items-center gap-2 font-semibold text-xs text-slate-800 opacity-80 hover:opacity-100 transition-all duration-300 hover:scale-105 px-3 py-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer text-left reveal-blur reveal-delay-400 shadow-sm hover:shadow"
             >
-              <Briefcase className="w-4 h-4 text-amber-600 transition-transform duration-300 group-hover:rotate-6" />
+              <Briefcase className="w-4 h-4 text-black transition-transform duration-300 group-hover:rotate-6" />
               <span>Buildium Accounting</span>
               <ArrowRight className="w-3 h-3 text-slate-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
             </button>
@@ -384,7 +384,7 @@ export const TaxConsultantWebsite: React.FC = () => {
               title="Click to explore CPA Quality Standards & Services"
               className="group flex items-center gap-2 font-semibold text-xs text-slate-800 opacity-80 hover:opacity-100 transition-all duration-300 hover:scale-105 px-3 py-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer text-left reveal-blur reveal-delay-500 shadow-sm hover:shadow"
             >
-              <UserCheck className="w-4 h-4 text-rose-600 transition-transform duration-300 group-hover:rotate-6" />
+              <UserCheck className="w-4 h-4 text-black transition-transform duration-300 group-hover:rotate-6" />
               <span>CPA Quality Standards</span>
               <ArrowRight className="w-3 h-3 text-slate-400 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
             </button>

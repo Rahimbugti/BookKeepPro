@@ -32,7 +32,7 @@ export function YellowWhyUsSection() {
         {/* Header */}
         <div className="max-w-3xl mb-12">
           <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
-            Why Companies Choose LedgerSync
+            Why Companies Choose BookKeepPro
           </h2>
           <p className="text-sm sm:text-base text-gray-900 font-semibold mt-3 leading-relaxed">
             Real feedback from property managers and small business founders who eliminated bookkeeping stress and saved 15+ hours each week.

@@ -24,7 +24,7 @@ export const AboutPage: React.FC = () => {
       <section className="py-16 sm:py-20 bg-gradient-to-b from-blue-50/50 via-white to-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 max-w-3xl text-center space-y-4">
           <span className="text-xs font-bold text-blue-600 uppercase tracking-widest block">
-            About LedgerSync Pro
+            About BookKeepPro
           </span>
           <h1 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight">
             Specialized Bookkeeping & Accounting Services
@@ -47,7 +47,7 @@ export const AboutPage: React.FC = () => {
                 Eliminating Accounting Headaches for Real Estate & SMB Leaders
               </h2>
               <p className="text-sm text-slate-600 leading-relaxed">
-                Bookkeeping shouldn't be a source of anxiety or a midnight chore. We founded LedgerSync Pro to provide small business founders and property management operators with a dedicated, certified bookkeeping team at a fraction of the cost of in-house staffing.
+                Bookkeeping shouldn't be a source of anxiety or a midnight chore. We founded BookKeepPro to provide small business founders and property management operators with a dedicated, certified bookkeeping team at a fraction of the cost of in-house staffing.
               </p>
               <p className="text-sm text-slate-600 leading-relaxed">
                 Whether managing 200 doors on AppFolio or processing 1,000 monthly e-commerce transactions in QuickBooks Online, our rigorous 2-tier audit system ensures every penny is categorized, balanced, and tax-ready.

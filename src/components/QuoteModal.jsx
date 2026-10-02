@@ -24,7 +24,7 @@ function buildMailtoLink({ formData, serviceName, estimatedPrice, breakdown }) {
 
   const body = encodeURIComponent(
     [
-      `Hello LedgerSync Team,`,
+      `Hello BookKeepPro Team,`,
       ``,
       `I would like to request a formal quote based on the estimate generated on your website.`,
       ``,

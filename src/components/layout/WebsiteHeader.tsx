@@ -60,11 +60,11 @@ export const WebsiteHeader: React.FC = () => {
           onClick={() => navigate('landing')}
         >
           <div className="w-11 h-11 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-lg shadow-md shadow-blue-600/20">
-            LS
+            BKP
           </div>
           <div>
             <div className="font-black text-xl text-slate-900 tracking-tight leading-none">
-              LedgerSync<span className="text-blue-600">Pro</span>
+              BookKeep<span className="text-blue-600">Pro</span>
             </div>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mt-0.5">
               Bookkeeping & Accounting

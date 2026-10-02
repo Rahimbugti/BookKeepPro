@@ -416,7 +416,7 @@ export const HomePage: React.FC = () => {
                 ))}
               </div>
               <p className="text-xs text-slate-600 leading-relaxed italic">
-                "LedgerSync Pro completely untangled our 8-month AppFolio backlog. Their 3-way trust account reconciliation passed our annual state audit with flying colors."
+                "BookKeepPro completely untangled our 8-month AppFolio backlog. Their 3-way trust account reconciliation passed our annual state audit with flying colors."
               </p>
               <div className="pt-2 border-t border-slate-100">
                 <p className="font-bold text-xs text-slate-900">David Reynolds</p>

@@ -8,8 +8,8 @@ export function FaqSection() {
 
   const faqs = [
     {
-      q: 'What is LedgerSync Bookkeeping & Advisory?',
-      a: 'LedgerSync is an all-in-one financial bookkeeping platform that pairs small businesses and property managers with dedicated, certified bookkeeping specialists. We handle daily reconciliations, AP/AR, owner distributions, 3-way trust compliance, and CPA-ready monthly closes.',
+      q: 'What is BookKeepPro Bookkeeping & Advisory?',
+      a: 'BookKeepPro is an all-in-one financial bookkeeping platform that pairs small businesses and property managers with dedicated, certified bookkeeping specialists. We handle daily reconciliations, AP/AR, owner distributions, 3-way trust compliance, and CPA-ready monthly closes.',
     },
     {
       q: 'How does the instant pricing calculator work?',

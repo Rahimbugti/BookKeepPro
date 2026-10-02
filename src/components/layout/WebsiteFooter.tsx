@@ -49,10 +49,10 @@ export const WebsiteFooter: React.FC = () => {
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('landing')}>
               <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-base shadow-md shadow-blue-600/20">
-                LS
+                BKP
               </div>
               <div className="font-black text-xl text-white tracking-tight">
-                LedgerSync<span className="text-blue-400">Pro</span>
+                BookKeep<span className="text-blue-400">Pro</span>
               </div>
             </div>
 
@@ -126,7 +126,7 @@ export const WebsiteFooter: React.FC = () => {
       <div className="border-t border-slate-800 py-6 px-4 sm:px-8 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
-            © {new Date().getFullYear()} LedgerSync Pro Bookkeeping Services. All rights reserved.
+            © {new Date().getFullYear()} BookKeepPro Bookkeeping Services. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
             <button type="button" onClick={() => navigate('about')} className="hover:text-slate-300">Privacy Policy</button>

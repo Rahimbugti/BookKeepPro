@@ -13,7 +13,7 @@ export function PreFooterCta({ onGetStarted }) {
 
           <div className="relative z-10 max-w-2xl mx-auto space-y-5">
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
-              Get Started with LedgerSync Solutions
+              Get Started with BookKeepPro Solutions
             </h2>
             <p className="text-sm sm:text-base text-gray-400 max-w-xl mx-auto leading-relaxed">
               Let us show you how you can eliminate backlog, automate reconciliations, and scale your financial operations starting today.
