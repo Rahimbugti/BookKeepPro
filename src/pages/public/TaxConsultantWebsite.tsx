@@ -108,15 +108,18 @@ export const TaxConsultantWebsite: React.FC = () => {
     setSubmitError(null);
 
     const payload = {
+      name: formData.fullName,
       fullName: formData.fullName,
       email: formData.email,
+      _replyto: formData.email,
+      _subject: `New Booking Request from ${formData.fullName} - ${formData.selectedPlan || formData.service}`,
       phone: formData.phone,
       company: formData.company || 'N/A',
       service: formData.service,
       selectedPlan: formData.selectedPlan || 'Custom / None Specified',
       currency: `${currentCurrency.code} (${currentCurrency.symbol})`,
       message: formData.notes || 'N/A',
-      submittedAt: new Date().toISOString(),
+      submittedAt: new Date().toLocaleString(),
     };
 
     // Backup to local storage

@@ -159,8 +159,11 @@ export const StepByStepCalculator: React.FC<Props> = ({
       .join(' | ');
 
     const newSubmission = {
+      name: quoteFormData.fullName,
       fullName: quoteFormData.fullName,
       email: quoteFormData.email,
+      _replyto: quoteFormData.email,
+      _subject: `New Calculator Estimate from ${quoteFormData.fullName} (${calculation.formattedRange})`,
       phone: quoteFormData.phone || 'N/A',
       company: quoteFormData.companyName || 'N/A',
       selectedService: serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping',
@@ -169,7 +172,7 @@ export const StepByStepCalculator: React.FC<Props> = ({
       estimatedRange: calculation.formattedRange,
       breakdownSummary: breakdownText,
       message: quoteFormData.notes || 'N/A',
-      submittedAt: new Date().toISOString(),
+      submittedAt: new Date().toLocaleString(),
     };
 
     try {

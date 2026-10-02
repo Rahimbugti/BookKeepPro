@@ -27,14 +27,17 @@ export const ContactPage: React.FC = () => {
     setSubmitError(null);
 
     const payload = {
+      name: formData.fullName,
       fullName: formData.fullName,
       email: formData.email,
+      _replyto: formData.email,
+      _subject: `New Contact Inquiry from ${formData.fullName} - ${formData.serviceType}`,
       phone: formData.phone,
       company: formData.companyName || 'N/A',
       country: formData.country,
       selectedService: formData.serviceType,
       message: formData.message || 'N/A',
-      submittedAt: new Date().toISOString(),
+      submittedAt: new Date().toLocaleString(),
     };
 
     try {
