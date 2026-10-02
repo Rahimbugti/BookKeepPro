@@ -106,7 +106,7 @@ export function QuoteModal({
   };
 
   // ── Submit ───────────────────────────────────────────────────────────────────
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -120,8 +120,27 @@ export function QuoteModal({
     setMailtoLink(link);
     setIsSubmitted(true);
 
-    // Open the user's default email client immediately
-    window.location.href = link;
+    try {
+      await fetch('https://formspree.io/f/mbglvrkg', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone || 'Not provided',
+          company: formData.businessName || 'Not provided',
+          service: serviceName,
+          estimatedPrice: `$${estimatedPrice.toLocaleString()}`,
+          message: `Quote Request for ${serviceName}`,
+          source: 'Calculator Quote Modal'
+        }),
+      });
+    } catch (err) {
+      console.error('Formspree quote modal submit error:', err);
+    }
   };
 
   // ── Re-open email client ─────────────────────────────────────────────────────
@@ -287,6 +306,7 @@ export function QuoteModal({
                 <input
                   type="text"
                   id="quote-fullname"
+                  name="fullName"
                   placeholder="e.g. John Doe"
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -305,6 +325,7 @@ export function QuoteModal({
                 <input
                   type="text"
                   id="quote-business"
+                  name="businessName"
                   placeholder="e.g. Acme Properties LLC"
                   value={formData.businessName}
                   onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
@@ -320,6 +341,7 @@ export function QuoteModal({
                 <input
                   type="email"
                   id="quote-email"
+                  name="email"
                   placeholder="e.g. john@example.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -338,6 +360,7 @@ export function QuoteModal({
                 <input
                   type="tel"
                   id="quote-phone"
+                  name="phone"
                   placeholder="e.g. (555) 000-0000"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}

@@ -146,28 +146,75 @@ export const StepByStepCalculator: React.FC<Props> = ({
     }
   };
 
-  const handleQuoteSubmit = (e: React.FormEvent) => {
+  const [isSubmittingQuote, setIsSubmittingQuote] = useState(false);
+  const [quoteError, setQuoteError] = useState<string | null>(null);
+
+  const handleQuoteSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmittingQuote(true);
+    setQuoteError(null);
+
+    const breakdownText = calculation.breakdown
+      .map((b) => `${b.label}: ${b.minFormatted} – ${b.maxFormatted}`)
+      .join(' | ');
+
     const newSubmission = {
-      id: 'quote_' + Date.now(),
-      timestamp: new Date().toISOString(),
-      serviceType: serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping',
-      calculation,
-      inputs: serviceType === 'smallBusiness' ? sbState : pmState,
-      contact: quoteFormData,
+      fullName: quoteFormData.fullName,
+      email: quoteFormData.email,
+      phone: quoteFormData.phone || 'N/A',
+      company: quoteFormData.companyName || 'N/A',
+      selectedService: serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping',
+      selectedPlan: `Calculator Estimate: ${calculation.formattedRange}`,
+      currency: `${currentCurrency.code} (${currentCurrency.symbol})`,
+      estimatedRange: calculation.formattedRange,
+      breakdownSummary: breakdownText,
+      message: quoteFormData.notes || 'N/A',
+      submittedAt: new Date().toISOString(),
     };
 
     try {
       const existing = JSON.parse(localStorage.getItem('bookkeep_quotes') || '[]');
-      existing.unshift(newSubmission);
+      existing.unshift({
+        id: 'quote_' + Date.now(),
+        ...newSubmission,
+        calculation,
+        inputs: serviceType === 'smallBusiness' ? sbState : pmState,
+      });
       localStorage.setItem('bookkeep_quotes', JSON.stringify(existing));
     } catch (err) {
       console.warn('LocalStorage save error', err);
     }
 
-    setQuoteSubmitted(true);
-    if (onRequestQuoteWithDetails) {
-      onRequestQuoteWithDetails(newSubmission);
+    try {
+      const response = await fetch('https://formspree.io/f/mbglvrkg', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newSubmission),
+      });
+
+      if (response.ok) {
+        setQuoteSubmitted(true);
+        setQuoteFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          companyName: '',
+          notes: '',
+        });
+        if (onRequestQuoteWithDetails) {
+          onRequestQuoteWithDetails(newSubmission);
+        }
+      } else {
+        const errorJson = await response.json().catch(() => ({}));
+        setQuoteError(errorJson?.error || 'Something went wrong. Please try again or contact us directly.');
+      }
+    } catch (err) {
+      setQuoteError('Something went wrong. Please try again or contact us directly.');
+    } finally {
+      setIsSubmittingQuote(false);
     }
   };
 
@@ -766,10 +813,10 @@ export const StepByStepCalculator: React.FC<Props> = ({
                   ✓
                 </div>
                 <h3 className="text-2xl font-black text-slate-900">
-                  Quote Request Received!
+                  Thank you!
                 </h3>
                 <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto">
-                  Thank you, <strong>{quoteFormData.fullName}</strong>. Your customized estimate of <strong>{calculation.formattedRange}</strong> has been logged. An accounting specialist will email you the official onboarding proposal within 2 hours.
+                  Your booking request has been submitted successfully. We will contact you shortly.
                 </p>
                 <button
                   type="button"
@@ -797,11 +844,18 @@ export const StepByStepCalculator: React.FC<Props> = ({
                 </div>
 
                 <form onSubmit={handleQuoteSubmit} className="space-y-4 text-xs font-semibold">
+                  {quoteError && (
+                    <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold animate-fadeIn">
+                      {quoteError}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-slate-700 mb-1">Full Name *</label>
                       <input
                         type="text"
+                        name="fullName"
                         required
                         placeholder="e.g. Sarah Jenkins"
                         value={quoteFormData.fullName}
@@ -814,6 +868,7 @@ export const StepByStepCalculator: React.FC<Props> = ({
                       <label className="block text-slate-700 mb-1">Business Email *</label>
                       <input
                         type="email"
+                        name="email"
                         required
                         placeholder="e.g. sarah@company.com"
                         value={quoteFormData.email}
@@ -828,6 +883,7 @@ export const StepByStepCalculator: React.FC<Props> = ({
                       <label className="block text-slate-700 mb-1">Company / Entity Name</label>
                       <input
                         type="text"
+                        name="company"
                         placeholder="e.g. Apex Property LLC"
                         value={quoteFormData.companyName}
                         onChange={(e) => setQuoteFormData({ ...quoteFormData, companyName: e.target.value })}
@@ -839,6 +895,7 @@ export const StepByStepCalculator: React.FC<Props> = ({
                       <label className="block text-slate-700 mb-1">Phone Number</label>
                       <input
                         type="tel"
+                        name="phone"
                         placeholder="e.g. +1 (555) 019-2834"
                         value={quoteFormData.phone}
                         onChange={(e) => setQuoteFormData({ ...quoteFormData, phone: e.target.value })}
@@ -851,6 +908,7 @@ export const StepByStepCalculator: React.FC<Props> = ({
                     <label className="block text-slate-700 mb-1">Specific Software / Notes (Optional)</label>
                     <textarea
                       rows={3}
+                      name="message"
                       placeholder="e.g. AppFolio, QuickBooks Online, 2 years behind on taxes, etc."
                       value={quoteFormData.notes}
                       onChange={(e) => setQuoteFormData({ ...quoteFormData, notes: e.target.value })}
@@ -860,10 +918,22 @@ export const StepByStepCalculator: React.FC<Props> = ({
 
                   <button
                     type="submit"
-                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2"
+                    disabled={isSubmittingQuote}
+                    className={`w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2 ${
+                      isSubmittingQuote ? 'opacity-70 cursor-not-allowed' : ''
+                    }`}
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Send My Formal Proposal</span>
+                    {isSubmittingQuote ? (
+                      <>
+                        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Sending Proposal...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Send My Formal Proposal</span>
+                      </>
+                    )}
                   </button>
 
                   <p className="text-[10px] text-center text-slate-400">

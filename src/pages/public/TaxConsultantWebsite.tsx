@@ -46,6 +46,8 @@ export const TaxConsultantWebsite: React.FC = () => {
     notes: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Accordion States
   const [openPlateItem, setOpenPlateItem] = useState<number | null>(0);
@@ -100,21 +102,69 @@ export const TaxConsultantWebsite: React.FC = () => {
     setIsBookModalOpen(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newBooking = {
-      id: 'booking_' + Date.now(),
-      timestamp: new Date().toISOString(),
-      ...formData,
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      company: formData.company || 'N/A',
+      service: formData.service,
+      selectedPlan: formData.selectedPlan || 'Custom / None Specified',
+      currency: `${currentCurrency.code} (${currentCurrency.symbol})`,
+      message: formData.notes || 'N/A',
+      submittedAt: new Date().toISOString(),
     };
+
+    // Backup to local storage
     try {
       const existing = JSON.parse(localStorage.getItem('bookkeep_bookings') || '[]');
-      existing.unshift(newBooking);
+      existing.unshift({
+        id: 'booking_' + Date.now(),
+        ...payload,
+      });
       localStorage.setItem('bookkeep_bookings', JSON.stringify(existing));
     } catch (err) {
       console.warn('LocalStorage save error', err);
     }
-    setIsSubmitted(true);
+
+    // Submit to Formspree endpoint
+    try {
+      const response = await fetch('https://formspree.io/f/mbglvrkg', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          company: '',
+          service: 'Small Business Bookkeeping',
+          selectedPlan: '',
+          notes: '',
+        });
+      } else {
+        const errorJson = await response.json().catch(() => ({}));
+        setSubmitError(
+          errorJson?.error ||
+            'Something went wrong. Please try again or contact us directly.'
+        );
+      }
+    } catch (err) {
+      setSubmitError('Something went wrong. Please try again or contact us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const plateServices = [
@@ -1211,9 +1261,9 @@ export const TaxConsultantWebsite: React.FC = () => {
                 <div className="w-12 h-12 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xl mx-auto shadow-md">
                   ✓
                 </div>
-                <h4 className="font-bold text-base text-emerald-900">Consultation Scheduled!</h4>
-                <p className="text-xs text-emerald-800 leading-relaxed">
-                  Thank you, <strong>{formData.fullName}</strong>. We will reach out to <strong>{formData.email}</strong> and call you at <strong>{formData.phone || '03345786667'}</strong> within 2 hours.
+                <h4 className="font-bold text-base text-emerald-900">Thank you!</h4>
+                <p className="text-xs text-emerald-800 leading-relaxed max-w-sm mx-auto">
+                  Your booking request has been submitted successfully. We will contact you shortly.
                 </p>
                 <button
                   type="button"
@@ -1228,6 +1278,12 @@ export const TaxConsultantWebsite: React.FC = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 text-xs font-semibold">
+                {submitError && (
+                  <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold animate-fadeIn">
+                    {submitError}
+                  </div>
+                )}
+
                 {formData.selectedPlan && (
                   <div className="p-3.5 bg-blue-50/80 border border-blue-200 rounded-2xl flex items-center justify-between text-xs">
                     <div>
@@ -1244,10 +1300,14 @@ export const TaxConsultantWebsite: React.FC = () => {
                   </div>
                 )}
 
+                <input type="hidden" name="selectedPlan" value={formData.selectedPlan} />
+                <input type="hidden" name="currency" value={`${currentCurrency.code} (${currentCurrency.symbol})`} />
+
                 <div>
                   <label className="block text-slate-700 mb-1">Your Full Name *</label>
                   <input
                     type="text"
+                    name="fullName"
                     required
                     placeholder="e.g. John Doe"
                     value={formData.fullName}
@@ -1261,6 +1321,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                     <label className="block text-slate-700 mb-1">Email *</label>
                     <input
                       type="email"
+                      name="email"
                       required
                       placeholder="name@company.com"
                       value={formData.email}
@@ -1272,6 +1333,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                     <label className="block text-slate-700 mb-1">Phone Number *</label>
                     <input
                       type="tel"
+                      name="phone"
                       required
                       placeholder="03345786667"
                       value={formData.phone}
@@ -1285,6 +1347,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                   <label className="block text-slate-700 mb-1">Company / Entity Name</label>
                   <input
                     type="text"
+                    name="company"
                     placeholder="e.g. Acme Properties LLC"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
@@ -1295,6 +1358,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                 <div>
                   <label className="block text-slate-700 mb-1">Primary Area of Interest</label>
                   <select
+                    name="service"
                     value={formData.service}
                     onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                     className="w-full p-3 rounded-xl border border-slate-300 bg-white font-normal outline-none focus:ring-2 focus:ring-black"
@@ -1311,6 +1375,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                   <label className="block text-slate-700 mb-1">Notes / Scope Overview</label>
                   <textarea
                     rows={3}
+                    name="notes"
                     placeholder="Tell us about your current workload, software, or deadlines..."
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -1320,9 +1385,19 @@ export const TaxConsultantWebsite: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-black hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md transition-all"
+                  disabled={isSubmitting}
+                  className={`w-full py-3.5 bg-black hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider rounded-full shadow-md transition-all flex items-center justify-center gap-2 ${
+                    isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
                 >
-                  Confirm Intro Call Booking
+                  {isSubmitting ? (
+                    <>
+                      <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Submitting Request...</span>
+                    </>
+                  ) : (
+                    <span>Confirm Intro Call Booking</span>
+                  )}
                 </button>
               </form>
             )}

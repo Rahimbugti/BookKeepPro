@@ -18,10 +18,55 @@ export const ContactPage: React.FC = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const payload = {
+      fullName: formData.fullName,
+      email: formData.email,
+      phone: formData.phone,
+      company: formData.companyName || 'N/A',
+      country: formData.country,
+      selectedService: formData.serviceType,
+      message: formData.message || 'N/A',
+      submittedAt: new Date().toISOString(),
+    };
+
+    try {
+      const response = await fetch('https://formspree.io/f/mbglvrkg', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          companyName: '',
+          country: 'United States',
+          serviceType: 'Small Business Monthly Bookkeeping',
+          message: '',
+        });
+      } else {
+        const errorJson = await response.json().catch(() => ({}));
+        setSubmitError(errorJson?.error || 'Something went wrong. Please try again or contact us directly.');
+      }
+    } catch (err) {
+      setSubmitError('Something went wrong. Please try again or contact us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -63,16 +108,16 @@ export const ContactPage: React.FC = () => {
                   ✓
                 </div>
                 <h4 className="text-lg font-bold text-emerald-900">
-                  Consultation Request Sent!
+                  Thank you!
                 </h4>
-                <p className="text-xs text-emerald-800 leading-relaxed">
-                  Thank you, <strong>{formData.fullName}</strong>. One of our senior bookkeeping directors has received your inquiry and will reach out to <strong>{formData.email}</strong> shortly.
+                <p className="text-xs text-emerald-800 leading-relaxed max-w-md mx-auto">
+                  Your booking request has been submitted successfully. We will contact you shortly.
                 </p>
                 <div className="pt-2">
                   <button
                     type="button"
                     onClick={() => setSubmitted(false)}
-                    className="px-5 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl"
+                    className="px-5 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl hover:bg-slate-800 transition-colors"
                   >
                     Send Another Inquiry
                   </button>
@@ -80,11 +125,18 @@ export const ContactPage: React.FC = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 text-xs font-semibold">
+                {submitError && (
+                  <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold animate-fadeIn">
+                    {submitError}
+                  </div>
+                )}
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-slate-700 mb-1">Full Name *</label>
                     <input
                       type="text"
+                      name="fullName"
                       required
                       placeholder="e.g. Michael Chang"
                       value={formData.fullName}
@@ -96,6 +148,7 @@ export const ContactPage: React.FC = () => {
                     <label className="block text-slate-700 mb-1">Work Email *</label>
                     <input
                       type="email"
+                      name="email"
                       required
                       placeholder="e.g. michael@horizonpm.com"
                       value={formData.email}
@@ -110,6 +163,7 @@ export const ContactPage: React.FC = () => {
                     <label className="block text-slate-700 mb-1">Company / Portfolio Name</label>
                     <input
                       type="text"
+                      name="company"
                       placeholder="e.g. Horizon Property Partners"
                       value={formData.companyName}
                       onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
@@ -119,6 +173,7 @@ export const ContactPage: React.FC = () => {
                   <div>
                     <label className="block text-slate-700 mb-1">Country</label>
                     <select
+                      name="country"
                       value={formData.country}
                       onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                       className="w-full p-3 rounded-xl border border-slate-300 bg-white font-normal focus:ring-2 focus:ring-blue-500"
@@ -127,6 +182,7 @@ export const ContactPage: React.FC = () => {
                       <option value="Canada">🇨🇦 Canada</option>
                       <option value="Australia">🇦🇺 Australia</option>
                       <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                      <option value="Pakistan">🇵🇰 Pakistan</option>
                       <option value="Other">Other Country</option>
                     </select>
                   </div>
@@ -135,6 +191,7 @@ export const ContactPage: React.FC = () => {
                 <div>
                   <label className="block text-slate-700 mb-1">Service Type Needed</label>
                   <select
+                    name="service"
                     value={formData.serviceType}
                     onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
                     className="w-full p-3 rounded-xl border border-slate-300 bg-white font-normal focus:ring-2 focus:ring-blue-500"
@@ -152,6 +209,7 @@ export const ContactPage: React.FC = () => {
                   <label className="block text-slate-700 mb-1">Project Details & Software</label>
                   <textarea
                     rows={4}
+                    name="message"
                     placeholder="Tell us about your current accounting setup, number of transactions/units, or specific pain points..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -161,10 +219,22 @@ export const ContactPage: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md shadow-blue-600/25 transition-all flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className={`w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md shadow-blue-600/25 transition-all flex items-center justify-center gap-2 ${
+                    isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+                  }`}
                 >
-                  <Send className="w-4 h-4 text-white" />
-                  <span>Submit Consultation Request</span>
+                  {isSubmitting ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Sending Request...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 text-white" />
+                      <span>Submit Consultation Request</span>
+                    </>
+                  )}
                 </button>
               </form>
             )}
