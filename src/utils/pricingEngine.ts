@@ -145,19 +145,16 @@ export function calculateSmallBusinessRange(
     }
   }
 
-  // Optional scope selections for Small Business
+  // Scope selections for Small Business - include all selected scope service fees
   if (inputs.selectedScopeIds && inputs.selectedScopeIds.length > 0) {
     const scopeMap = new Map(cfg.scopeOfWork.map((s) => [s.id, s]));
     inputs.selectedScopeIds.forEach((scopeId) => {
       const scopeItem = scopeMap.get(scopeId);
       if (scopeItem) {
-        // We include specific modular additions beyond base
-        if (['payrollJournal', 'yearEnd1099', 'accountsPayable', 'accountsReceivable'].includes(scopeId)) {
-          minUSD += scopeItem.priceRange.min;
-          maxUSD += scopeItem.priceRange.max;
-        }
+        minUSD += scopeItem.priceRange.min;
+        maxUSD += scopeItem.priceRange.max;
         breakdown.push({
-          label: `Scope: ${scopeItem.label}`,
+          label: `Service: ${scopeItem.label}`,
           minUSD: scopeItem.priceRange.min,
           maxUSD: scopeItem.priceRange.max,
           minFormatted: formatCurrencyAmount(scopeItem.priceRange.min, currencyCode),

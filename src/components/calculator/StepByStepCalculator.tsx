@@ -593,8 +593,15 @@ export const StepByStepCalculator: React.FC<Props> = ({
                     >
                       {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                     </div>
-                    <div>
-                      <h4 className="font-extrabold text-xs text-slate-900">{scope.label}</h4>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <h4 className="font-extrabold text-xs text-slate-900">{scope.label}</h4>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md shrink-0 tabular-nums ${
+                          isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
+                        }`}>
+                          +{formatRangeUSD(scope.priceRange.min, scope.priceRange.max)}
+                        </span>
+                      </div>
                       <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
                         {scope.description}
                       </p>

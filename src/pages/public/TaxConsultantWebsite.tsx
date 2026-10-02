@@ -42,6 +42,7 @@ export const TaxConsultantWebsite: React.FC = () => {
     phone: '',
     company: '',
     service: 'Small Business Bookkeeping',
+    selectedPlan: '',
     notes: '',
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -84,6 +85,19 @@ export const TaxConsultantWebsite: React.FC = () => {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 60);
+  };
+
+  const handleChoosePlan = (planName: string, priceFormatted: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedPlan: `${planName} (${priceFormatted} - Provisional)`,
+      service: planName.toLowerCase().includes('property')
+        ? 'Property Management Accounting (AppFolio/Buildium)'
+        : planName.toLowerCase().includes('hourly')
+        ? 'Hourly Bookkeeping Support ($10–$20/hr)'
+        : 'Small Business Bookkeeping',
+    }));
+    setIsBookModalOpen(true);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -739,28 +753,39 @@ export const TaxConsultantWebsite: React.FC = () => {
                   key={idx}
                   className={`py-8 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-slate-50/60 transition-colors px-4 rounded-2xl reveal-blur ${delayClass}`}
                 >
-                  <div className="space-y-1 max-w-lg">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1.5 max-w-lg">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h3 className="font-serif text-xl font-bold text-black">{tier.name}</h3>
                       {tier.isPopular && (
                         <span className="px-2 py-0.5 bg-black text-white text-[9px] font-bold uppercase tracking-wider rounded-full">
                           {tier.badge}
                         </span>
                       )}
+                      <span className="px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200/80 text-[9px] font-bold uppercase tracking-wider rounded-md">
+                        Provisional Pricing
+                      </span>
                     </div>
                     <p className="text-xs text-slate-600">{tier.description}</p>
+                    <p className="text-[10px] text-amber-700 font-medium">
+                      * Starting estimate subject to final confirmation based on transaction complexity.
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between md:justify-end gap-6 shrink-0">
                     <div className="text-right">
-                      <span className="font-serif text-3xl font-bold text-black">{formattedPrice}</span>
-                      <span className="text-xs text-slate-400 ml-1">{tier.period}</span>
+                      <div className="flex items-baseline justify-end gap-1">
+                        <span className="font-serif text-3xl font-bold text-black">{formattedPrice}</span>
+                        <span className="text-xs text-slate-400">{tier.period}</span>
+                      </div>
+                      <span className="text-[10px] font-semibold text-slate-400 block mt-0.5">
+                        Provisional Base
+                      </span>
                     </div>
 
                     <button
                       type="button"
-                      onClick={() => setIsBookModalOpen(true)}
-                      className="px-5 py-2.5 bg-black hover:bg-slate-800 text-white rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95 duration-150"
+                      onClick={() => handleChoosePlan(tier.name, formattedPrice)}
+                      className="px-5 py-2.5 bg-black hover:bg-slate-800 text-white rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95 duration-150 shadow-sm"
                     >
                       Choose plan
                     </button>
@@ -791,7 +816,7 @@ export const TaxConsultantWebsite: React.FC = () => {
 
                 <button
                   type="button"
-                  onClick={() => setIsBookModalOpen(true)}
+                  onClick={() => handleChoosePlan('Hourly Bookkeeping Support', `${formatRangeUSD(10, 20)}/hr`)}
                   className="px-5 py-2.5 border border-slate-300 hover:border-black text-slate-900 bg-white rounded-full text-xs font-bold transition-all hover:scale-105 active:scale-95 duration-150"
                 >
                   Hire hourly
@@ -1203,6 +1228,22 @@ export const TaxConsultantWebsite: React.FC = () => {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4 text-xs font-semibold">
+                {formData.selectedPlan && (
+                  <div className="p-3.5 bg-blue-50/80 border border-blue-200 rounded-2xl flex items-center justify-between text-xs">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-blue-600 block">Selected Package</span>
+                      <strong className="text-slate-900 text-sm">{formData.selectedPlan}</strong>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, selectedPlan: '' })}
+                      className="text-[10px] text-slate-400 hover:text-slate-700 underline font-semibold"
+                    >
+                      Change
+                    </button>
+                  </div>
+                )}
+
                 <div>
                   <label className="block text-slate-700 mb-1">Your Full Name *</label>
                   <input
