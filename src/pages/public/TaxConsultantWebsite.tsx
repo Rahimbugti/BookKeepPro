@@ -122,6 +122,20 @@ export const TaxConsultantWebsite: React.FC = () => {
       submittedAt: new Date().toLocaleString(),
     };
 
+    const formBody = new FormData();
+    formBody.append('name', formData.fullName);
+    formBody.append('fullName', formData.fullName);
+    formBody.append('email', formData.email);
+    formBody.append('_replyto', formData.email);
+    formBody.append('_subject', `New Booking Request from ${formData.fullName} - ${formData.selectedPlan || formData.service}`);
+    formBody.append('phone', formData.phone);
+    formBody.append('company', formData.company || 'N/A');
+    formBody.append('service', formData.service);
+    formBody.append('selectedPlan', formData.selectedPlan || 'Custom / None Specified');
+    formBody.append('currency', `${currentCurrency.code} (${currentCurrency.symbol})`);
+    formBody.append('message', formData.notes || 'N/A');
+    formBody.append('submittedAt', new Date().toLocaleString());
+
     // Backup to local storage
     try {
       const existing = JSON.parse(localStorage.getItem('bookkeep_bookings') || '[]');
@@ -140,9 +154,8 @@ export const TaxConsultantWebsite: React.FC = () => {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: formBody,
       });
 
       if (response.ok) {
@@ -1280,7 +1293,12 @@ export const TaxConsultantWebsite: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 text-xs font-semibold">
+              <form
+                action="https://formspree.io/f/mbglvrkg"
+                method="POST"
+                onSubmit={handleSubmit}
+                className="space-y-4 text-xs font-semibold"
+              >
                 {submitError && (
                   <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold animate-fadeIn">
                     {submitError}

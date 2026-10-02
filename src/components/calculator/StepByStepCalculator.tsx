@@ -188,14 +188,29 @@ export const StepByStepCalculator: React.FC<Props> = ({
       console.warn('LocalStorage save error', err);
     }
 
+    const formBody = new FormData();
+    formBody.append('name', quoteFormData.fullName);
+    formBody.append('fullName', quoteFormData.fullName);
+    formBody.append('email', quoteFormData.email);
+    formBody.append('_replyto', quoteFormData.email);
+    formBody.append('_subject', `New Calculator Estimate from ${quoteFormData.fullName} (${calculation.formattedRange})`);
+    formBody.append('phone', quoteFormData.phone || 'N/A');
+    formBody.append('company', quoteFormData.companyName || 'N/A');
+    formBody.append('selectedService', serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping');
+    formBody.append('selectedPlan', `Calculator Estimate: ${calculation.formattedRange}`);
+    formBody.append('currency', `${currentCurrency.code} (${currentCurrency.symbol})`);
+    formBody.append('estimatedRange', calculation.formattedRange);
+    formBody.append('breakdownSummary', breakdownText);
+    formBody.append('message', quoteFormData.notes || 'N/A');
+    formBody.append('submittedAt', new Date().toLocaleString());
+
     try {
       const response = await fetch('https://formspree.io/f/mbglvrkg', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newSubmission),
+        body: formBody,
       });
 
       if (response.ok) {
@@ -846,7 +861,12 @@ export const StepByStepCalculator: React.FC<Props> = ({
                   </p>
                 </div>
 
-                <form onSubmit={handleQuoteSubmit} className="space-y-4 text-xs font-semibold">
+                <form
+                  action="https://formspree.io/f/mbglvrkg"
+                  method="POST"
+                  onSubmit={handleQuoteSubmit}
+                  className="space-y-4 text-xs font-semibold"
+                >
                   {quoteError && (
                     <div className="p-3 bg-rose-50 border border-rose-200 text-rose-800 rounded-xl text-xs font-semibold animate-fadeIn">
                       {quoteError}
