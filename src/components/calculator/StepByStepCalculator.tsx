@@ -3,18 +3,20 @@ import {
   Building2,
   Briefcase,
   Layers,
-  CheckSquare,
   Sparkles,
   ArrowRight,
-  ArrowLeft,
   RotateCcw,
   Send,
   Clock,
   ShieldCheck,
-  FileText,
-  CreditCard,
-  Building,
+  CheckCircle2,
+  Lock,
+  ChevronRight,
   HelpCircle,
+  X,
+  FileCheck2,
+  Check,
+  Zap,
 } from 'lucide-react';
 import { PRICING_CONFIG } from '../../data/pricingConfig';
 import {
@@ -38,8 +40,7 @@ export const StepByStepCalculator: React.FC<Props> = ({
 }) => {
   const { currentCurrency, formatRangeUSD, formatUSD } = useCurrency();
 
-  // Wizard state: 1: Service, 2: Workload, 3: Scope, 4: Results, 5: Quote Form
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  // Active Service Tab
   const [serviceType, setServiceType] = useState<'smallBusiness' | 'propertyManagement'>(initialService);
 
   // Small Business Form State
@@ -71,7 +72,8 @@ export const StepByStepCalculator: React.FC<Props> = ({
     ],
   });
 
-  // Quote form state
+  // Modal / Quote Request State
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [quoteFormData, setQuoteFormData] = useState({
     fullName: '',
     email: '',
@@ -91,7 +93,6 @@ export const StepByStepCalculator: React.FC<Props> = ({
   }, [serviceType, sbState, pmState, currentCurrency]);
 
   const handleReset = () => {
-    setCurrentStep(1);
     setSbState({
       serviceType: 'monthly',
       transactionTier: 'up-to-100',
@@ -170,454 +171,378 @@ export const StepByStepCalculator: React.FC<Props> = ({
     }
   };
 
-  const stepTitles = [
-    'Choose Service',
-    'Enter Workload',
-    'Scope & Deliverables',
-    'Estimated Price Range',
-    'Request Detailed Quote',
-  ];
-
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden text-slate-900 transition-all">
-      {/* ── Top Bar with Currency Selector & Step Tracker ── */}
-      <div className="bg-slate-900 text-white p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block mb-1">
-            Interactive Cost Estimation Engine
-          </span>
-          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-            Bookkeeping & Accounting Pricing Calculator
-          </h2>
-          <p className="text-xs text-slate-400 mt-1 max-w-xl">
-            Get an instant, transparent price range customized for small businesses and property management portfolios.
-          </p>
+    <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden text-slate-900 transition-all">
+      {/* ── Top Header & Tab Navigation ── */}
+      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white p-6 sm:p-8 border-b border-slate-800">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-1.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-400 text-[11px] font-bold tracking-wide uppercase">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Real-Time Pricing Engine</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              Customize Your Bookkeeping Plan
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-xl">
+              Select your business model, transaction volume, and service scope below for an instant, transparent estimate.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 self-start lg:self-auto bg-slate-800/90 backdrop-blur p-2 rounded-2xl border border-slate-700/80 shadow-inner">
+            <span className="text-xs font-semibold text-slate-300 pl-2">Currency:</span>
+            <CountryCurrencySelector variant="dark" />
+          </div>
         </div>
 
-        <div className="flex items-center gap-3 self-start md:self-auto bg-slate-800 p-2 rounded-2xl border border-slate-700">
-          <span className="text-[11px] font-semibold text-slate-300 pl-1">Currency:</span>
-          <CountryCurrencySelector variant="dark" />
+        {/* ── Main Category Segment Tabs ── */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800 max-w-2xl">
+          <button
+            type="button"
+            onClick={() => setServiceType('smallBusiness')}
+            className={`flex items-center justify-center gap-3 py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 ${
+              serviceType === 'smallBusiness'
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <Briefcase className="w-4 h-4 shrink-0" />
+            <span>Small Business & Startups</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setServiceType('propertyManagement')}
+            className={`flex items-center justify-center gap-3 py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 ${
+              serviceType === 'propertyManagement'
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+            }`}
+          >
+            <Building2 className="w-4 h-4 shrink-0" />
+            <span>Property Management & Real Estate</span>
+          </button>
         </div>
       </div>
 
-      {/* ── Step Progress Indicator ── */}
-      <div className="px-6 py-4 bg-slate-50 border-b border-slate-200 overflow-x-auto">
-        <div className="flex items-center justify-between min-w-[540px]">
-          {stepTitles.map((title, idx) => {
-            const stepNum = idx + 1;
-            const isCompleted = currentStep > stepNum;
-            const isCurrent = currentStep === stepNum;
-            return (
-              <div
-                key={idx}
-                className="flex items-center gap-2 cursor-pointer"
-                onClick={() => {
-                  if (stepNum <= Math.max(currentStep, 4)) {
-                    setCurrentStep(stepNum);
-                  }
-                }}
-              >
-                <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs transition-colors ${
-                    isCurrent
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-                      : isCompleted
-                      ? 'bg-slate-900 text-white'
-                      : 'bg-slate-200 text-slate-500'
-                  }`}
-                >
-                  {isCompleted ? '✓' : stepNum}
+      {/* ── 2-Column Main Workspace ── */}
+      <div className="p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start bg-slate-50/50">
+        
+        {/* ═══════════════════════════════════════════════════════════════════ */}
+        {/* LEFT COLUMN: INTERACTIVE CONTROLS & SCOPE BUILDER                  */}
+        {/* ═══════════════════════════════════════════════════════════════════ */}
+        <div className="lg:col-span-7 space-y-8">
+          
+          {/* ── SMALL BUSINESS CONFIGURATOR ── */}
+          {serviceType === 'smallBusiness' && (
+            <div className="space-y-6">
+              
+              {/* 1. Engagement Model (Monthly vs Catch-up) */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-blue-600" />
+                    <span>Engagement Model</span>
+                  </label>
+                  <span className="text-[11px] font-semibold text-slate-400">Step 1 of 3</span>
                 </div>
-                <span
-                  className={`text-xs font-bold ${
-                    isCurrent
-                      ? 'text-blue-700'
-                      : isCompleted
-                      ? 'text-slate-800'
-                      : 'text-slate-400'
-                  }`}
-                >
-                  {title}
-                </span>
-                {idx < stepTitles.length - 1 && (
-                  <div className="w-8 h-[2px] bg-slate-200 mx-2" />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSbState({ ...sbState, serviceType: 'monthly' })}
+                    className={`p-4 rounded-2xl border-2 text-left transition-all relative ${
+                      sbState.serviceType === 'monthly'
+                        ? 'border-blue-600 bg-blue-50/50 text-slate-900 shadow-md shadow-blue-600/10'
+                        : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-extrabold text-sm">Monthly Bookkeeping</span>
+                      {sbState.serviceType === 'monthly' && (
+                        <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-500 leading-relaxed">
+                      Continuous ledger maintenance, reconciliations, and tax-ready monthly close.
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setSbState({ ...sbState, serviceType: 'cleanup' })}
+                    className={`p-4 rounded-2xl border-2 text-left transition-all relative ${
+                      sbState.serviceType === 'cleanup'
+                        ? 'border-blue-600 bg-blue-50/50 text-slate-900 shadow-md shadow-blue-600/10'
+                        : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-extrabold text-sm">Historical Cleanup</span>
+                      {sbState.serviceType === 'cleanup' && (
+                        <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-500 leading-relaxed">
+                      One-time catch-up project to untangle past-due books and get tax-ready.
+                    </p>
+                  </button>
+                </div>
+
+                {/* Conditional Cleanup Duration */}
+                {sbState.serviceType === 'cleanup' && (
+                  <div className="mt-4 p-4 bg-amber-50/90 rounded-2xl border border-amber-200 space-y-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-amber-900">
+                      Months of Backlog to Catch Up
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {Object.entries(PRICING_CONFIG.smallBusiness.cleanupDurations).map(([key, val]) => (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => setSbState({ ...sbState, cleanupDuration: key })}
+                          className={`p-2.5 rounded-xl text-xs font-bold transition-all ${
+                            sbState.cleanupDuration === key
+                              ? 'bg-amber-600 text-white shadow-sm'
+                              : 'bg-white text-slate-800 border border-amber-300 hover:bg-amber-100/50'
+                          }`}
+                        >
+                          {val.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
-            );
-          })}
-        </div>
-      </div>
 
-      {/* ── Wizard Body ── */}
-      <div className="p-6 sm:p-10">
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {/* STEP 1: CHOOSE SERVICE                                              */}
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {currentStep === 1 && (
-          <div className="space-y-8 animate-fadeIn">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <h3 className="text-2xl font-black text-slate-900">
-                Step 1: Which Service Best Matches Your Business?
-              </h3>
-              <p className="text-sm text-slate-500">
-                Select your primary industry category to customize workload parameters.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {/* Option A: Small Business Bookkeeping */}
-              <div
-                onClick={() => setServiceType('smallBusiness')}
-                className={`p-7 rounded-3xl border-2 cursor-pointer transition-all duration-200 flex flex-col justify-between ${
-                  serviceType === 'smallBusiness'
-                    ? 'border-blue-600 bg-blue-50/40 shadow-lg shadow-blue-600/10'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center">
-                      <Briefcase className="w-6 h-6 text-black" />
-                    </div>
-                    <span className="text-[10px] font-bold text-blue-600 uppercase bg-blue-100/60 px-2.5 py-1 rounded-full">
-                      Startups & SMBs
-                    </span>
-                  </div>
-
-                  <h4 className="text-lg font-black text-slate-900 mb-2">
-                    Small Business Bookkeeping
-                  </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Designed for startups, agencies, e-commerce stores, consultancies, and SMBs requiring monthly reconciliations, P&L statements, or historical backlog cleanups.
-                  </p>
-
-                  <ul className="mt-5 space-y-2 text-xs font-semibold text-slate-700">
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> Monthly transactions & bank feeds
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> QuickBooks Online / Xero management
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> Multi-month catch-up cleanups
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> Tax-ready financial statements
-                    </li>
-                  </ul>
+              {/* 2. Monthly Transaction Tier Chips */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-blue-600" />
+                    <span>Monthly Transaction Volume</span>
+                  </label>
+                  <span className="text-[11px] font-semibold text-slate-400">Step 2 of 3</span>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-200/70 flex items-center justify-between text-xs font-bold">
-                  <span className="text-slate-500">Starts at {formatUSD(150)}/mo base</span>
-                  <span className="text-blue-600 font-extrabold flex items-center gap-1">
-                    Select <ArrowRight className="w-3.5 h-3.5 text-black" />
-                  </span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {Object.entries(PRICING_CONFIG.smallBusiness.transactionTiers).map(([key, val]) => {
+                    const isSelected = sbState.transactionTier === key;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setSbState({ ...sbState, transactionTier: key })}
+                        className={`p-4 rounded-2xl border-2 text-center transition-all flex flex-col items-center justify-center gap-1 ${
+                          isSelected
+                            ? 'border-blue-600 bg-blue-50/60 shadow-md text-blue-900'
+                            : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700'
+                        }`}
+                      >
+                        <span className="text-xs font-extrabold block">
+                          {val.label}
+                        </span>
+                        <span className={`text-[10px] font-semibold ${isSelected ? 'text-blue-600' : 'text-slate-400'}`}>
+                          {key === 'up-to-100' ? 'Starter' : key === '101-300' ? 'Standard' : key === '301-600' ? 'Growth' : 'Enterprise'}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Option B: Property Management Bookkeeping */}
-              <div
-                onClick={() => setServiceType('propertyManagement')}
-                className={`p-7 rounded-3xl border-2 cursor-pointer transition-all duration-200 flex flex-col justify-between ${
-                  serviceType === 'propertyManagement'
-                    ? 'border-blue-600 bg-blue-50/40 shadow-lg shadow-blue-600/10'
-                    : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
-                }`}
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center">
-                      <Building2 className="w-6 h-6 text-black" />
-                    </div>
-                    <span className="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-100/60 px-2.5 py-1 rounded-full">
-                      Real Estate & HOAs
-                    </span>
-                  </div>
+              {/* 3. Account Counters (Bank Accounts & Credit Cards) */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-900 block">
+                  Active Financial Accounts to Reconcile
+                </label>
 
-                  <h4 className="text-lg font-black text-slate-900 mb-2">
-                    Property Management Bookkeeping
-                  </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    Built for property managers, landlords, HOAs, and real estate portfolios operating on AppFolio, Buildium, Rent Manager, or Yardi.
-                  </p>
-
-                  <ul className="mt-5 space-y-2 text-xs font-semibold text-slate-700">
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> Door / unit-based transaction accounting
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> 3-Way trust & escrow reconciliation
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> Owner statements & monthly distributions
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="text-black">✓</span> Tenant ledgers & security deposit handling
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-200/70 flex items-center justify-between text-xs font-bold">
-                  <span className="text-slate-500">Starts at {formatUSD(250)}/mo base</span>
-                  <span className="text-blue-600 font-extrabold flex items-center gap-1">
-                    Select <ArrowRight className="w-3.5 h-3.5 text-black" />
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-4 max-w-4xl mx-auto">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(2)}
-                className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2"
-              >
-                <span>Continue to Workload Details</span>
-                <ArrowRight className="w-4 h-4 text-white" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {/* STEP 2: WORKLOAD PARAMETERS                                         */}
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {currentStep === 2 && (
-          <div className="space-y-8 animate-fadeIn max-w-3xl mx-auto">
-            <div className="text-center space-y-2">
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
-                {serviceType === 'smallBusiness' ? 'Small Business Workload' : 'Property Portfolio Scale'}
-              </span>
-              <h3 className="text-2xl font-black text-slate-900">
-                Step 2: Define Your Volume & Account Workload
-              </h3>
-              <p className="text-xs text-slate-500">
-                Enter your transaction counts, accounts, and cleanup duration if applicable.
-              </p>
-            </div>
-
-            {/* ── Form Fields for Small Business ── */}
-            {serviceType === 'smallBusiness' && (
-              <div className="space-y-6 bg-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200 text-xs">
-                {/* 1. Service Type: Monthly vs Cleanup */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                    Engagement Model
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setSbState({ ...sbState, serviceType: 'monthly' })}
-                      className={`p-4 rounded-xl border text-left transition-all ${
-                        sbState.serviceType === 'monthly'
-                          ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-md'
-                          : 'bg-white text-slate-800 border-slate-300 hover:bg-slate-100'
-                      }`}
-                    >
-                      <div className="font-bold text-sm">Recurring Monthly Bookkeeping</div>
-                      <div className={`text-[11px] mt-1 ${sbState.serviceType === 'monthly' ? 'text-blue-100' : 'text-slate-500'}`}>
-                        Ongoing monthly reconciliation & ledger maintenance.
-                      </div>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setSbState({ ...sbState, serviceType: 'cleanup' })}
-                      className={`p-4 rounded-xl border text-left transition-all ${
-                        sbState.serviceType === 'cleanup'
-                          ? 'bg-blue-600 text-white border-blue-600 font-bold shadow-md'
-                          : 'bg-white text-slate-800 border-slate-300 hover:bg-slate-100'
-                      }`}
-                    >
-                      <div className="font-bold text-sm">One-Time Cleanup / Catch-up</div>
-                      <div className={`text-[11px] mt-1 ${sbState.serviceType === 'cleanup' ? 'text-blue-100' : 'text-slate-500'}`}>
-                        Historical backlog reconciliation for taxes or financing.
-                      </div>
-                    </button>
-                  </div>
-                </div>
-
-                {/* 2. Monthly Transactions Tier */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                    Estimated Monthly Transactions
-                  </label>
-                  <select
-                    value={sbState.transactionTier}
-                    onChange={(e) => setSbState({ ...sbState, transactionTier: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500"
-                  >
-                    {Object.entries(PRICING_CONFIG.smallBusiness.transactionTiers).map(([key, val]) => (
-                      <option key={key} value={key}>
-                        {val.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* 3. Number of Bank & Credit Card Accounts */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                      Bank Accounts to Reconcile
-                    </label>
-                    <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-slate-300">
+                  {/* Bank Accounts Counter */}
+                  <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-xs text-slate-900">Bank Accounts</h4>
+                      <p className="text-[11px] text-slate-500">Checking, savings, & payroll</p>
+                    </div>
+
+                    <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-300 shadow-xs">
                       <button
                         type="button"
                         onClick={() => setSbState({ ...sbState, bankAccounts: Math.max(1, sbState.bankAccounts - 1) })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         -
                       </button>
-                      <span className="flex-1 text-center font-extrabold text-sm text-slate-900">
-                        {sbState.bankAccounts} {sbState.bankAccounts === 1 ? 'Account' : 'Accounts'}
+                      <span className="w-6 text-center font-extrabold text-sm text-slate-900">
+                        {sbState.bankAccounts}
                       </span>
                       <button
                         type="button"
                         onClick={() => setSbState({ ...sbState, bankAccounts: sbState.bankAccounts + 1 })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         +
                       </button>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                      Credit Card Accounts
-                    </label>
-                    <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-slate-300">
+                  {/* Credit Cards Counter */}
+                  <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-xs text-slate-900">Credit Cards</h4>
+                      <p className="text-[11px] text-slate-500">Corporate & founder cards</p>
+                    </div>
+
+                    <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-300 shadow-xs">
                       <button
                         type="button"
                         onClick={() => setSbState({ ...sbState, creditCards: Math.max(0, sbState.creditCards - 1) })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         -
                       </button>
-                      <span className="flex-1 text-center font-extrabold text-sm text-slate-900">
-                        {sbState.creditCards} {sbState.creditCards === 1 ? 'Card' : 'Cards'}
+                      <span className="w-6 text-center font-extrabold text-sm text-slate-900">
+                        {sbState.creditCards}
                       </span>
                       <button
                         type="button"
                         onClick={() => setSbState({ ...sbState, creditCards: sbState.creditCards + 1 })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         +
                       </button>
                     </div>
                   </div>
                 </div>
-
-                {/* 4. Cleanup Duration (Conditional) */}
-                {sbState.serviceType === 'cleanup' && (
-                  <div className="p-4 bg-amber-50/80 rounded-2xl border border-amber-200 space-y-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-amber-900">
-                      Backlog Catch-up Time Period (Months behind)
-                    </label>
-                    <select
-                      value={sbState.cleanupDuration}
-                      onChange={(e) => setSbState({ ...sbState, cleanupDuration: e.target.value })}
-                      className="w-full p-3 rounded-xl border border-amber-300 bg-white font-semibold text-slate-900"
-                    >
-                      {Object.entries(PRICING_CONFIG.smallBusiness.cleanupDurations).map(([key, val]) => (
-                        <option key={key} value={key}>
-                          {val.label}
-                        </option>
-                      ))}
-                    </select>
-                    <p className="text-[11px] text-amber-800">
-                      * Cleanup projects are one-time fixed-scope engagements to bring all records up to date.
-                    </p>
-                  </div>
-                )}
               </div>
-            )}
 
-            {/* ── Form Fields for Property Management ── */}
-            {serviceType === 'propertyManagement' && (
-              <div className="space-y-6 bg-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200 text-xs">
-                {/* 1. Unit Count Range */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                    Number of Units / Doors in Portfolio
+            </div>
+          )}
+
+          {/* ── PROPERTY MANAGEMENT CONFIGURATOR ── */}
+          {serviceType === 'propertyManagement' && (
+            <div className="space-y-6">
+              
+              {/* 1. Units / Doors Volume Chips */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                    <Building2 className="w-4 h-4 text-blue-600" />
+                    <span>Portfolio Doors / Unit Count</span>
                   </label>
-                  <select
-                    value={pmState.unitTier}
-                    onChange={(e) => setPmState({ ...pmState, unitTier: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500"
-                  >
-                    {Object.entries(PRICING_CONFIG.propertyManagement.unitTiers).map(([key, val]) => (
-                      <option key={key} value={key}>
-                        {val.label}
-                      </option>
-                    ))}
-                  </select>
+                  <span className="text-[11px] font-semibold text-slate-400">Step 1 of 3</span>
                 </div>
 
-                {/* 2. Property Type */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                    Primary Property Asset Type
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                  {Object.entries(PRICING_CONFIG.propertyManagement.unitTiers).map(([key, val]) => {
+                    const isSelected = pmState.unitTier === key;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setPmState({ ...pmState, unitTier: key })}
+                        className={`p-3.5 rounded-2xl border-2 text-center transition-all flex flex-col items-center justify-center gap-1 ${
+                          isSelected
+                            ? 'border-blue-600 bg-blue-50/60 shadow-md text-blue-900 font-black'
+                            : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-bold'
+                        }`}
+                      >
+                        <span className="text-xs block">{val.label}</span>
+                        <span className="text-[9px] uppercase font-extrabold text-slate-400">Units</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 2. Property Asset Type */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4 text-blue-600" />
+                    <span>Primary Property Asset Type</span>
                   </label>
-                  <select
-                    value={pmState.propertyType}
-                    onChange={(e) => setPmState({ ...pmState, propertyType: e.target.value })}
-                    className="w-full p-3.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:ring-2 focus:ring-blue-500"
-                  >
-                    {Object.entries(PRICING_CONFIG.propertyManagement.propertyTypes).map(([key, val]) => (
-                      <option key={key} value={key}>
-                        {val.label}
-                      </option>
-                    ))}
-                  </select>
+                  <span className="text-[11px] font-semibold text-slate-400">Step 2 of 3</span>
                 </div>
 
-                {/* 3. Bank & Credit Card accounts */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {Object.entries(PRICING_CONFIG.propertyManagement.propertyTypes).map(([key, val]) => {
+                    const isSelected = pmState.propertyType === key;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setPmState({ ...pmState, propertyType: key })}
+                        className={`p-3.5 rounded-2xl border-2 text-center transition-all ${
+                          isSelected
+                            ? 'border-blue-600 bg-blue-50/60 shadow-md text-blue-900 font-black'
+                            : 'border-slate-200 bg-white hover:border-slate-300 text-slate-700 font-bold'
+                        }`}
+                      >
+                        <span className="text-xs block">{val.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 3. Account Counters for PM */}
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-900 block">
+                  Operating & Trust Accounts
+                </label>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                      Operating / Trust Accounts
-                    </label>
-                    <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-slate-300">
+                  {/* Bank & Trust Accounts Counter */}
+                  <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-xs text-slate-900">Operating & Trust Accounts</h4>
+                      <p className="text-[11px] text-slate-500">Security deposit & owner funds</p>
+                    </div>
+
+                    <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-300 shadow-xs">
                       <button
                         type="button"
                         onClick={() => setPmState({ ...pmState, bankAccounts: Math.max(1, pmState.bankAccounts - 1) })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         -
                       </button>
-                      <span className="flex-1 text-center font-extrabold text-sm text-slate-900">
-                        {pmState.bankAccounts} {pmState.bankAccounts === 1 ? 'Account' : 'Accounts'}
+                      <span className="w-6 text-center font-extrabold text-sm text-slate-900">
+                        {pmState.bankAccounts}
                       </span>
                       <button
                         type="button"
                         onClick={() => setPmState({ ...pmState, bankAccounts: pmState.bankAccounts + 1 })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         +
                       </button>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-800 mb-2">
-                      Credit Card Accounts
-                    </label>
-                    <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-slate-300">
+                  {/* Credit Cards Counter */}
+                  <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-xs text-slate-900">Credit Cards</h4>
+                      <p className="text-[11px] text-slate-500">Vendor & maintenance cards</p>
+                    </div>
+
+                    <div className="flex items-center gap-3 bg-white px-2 py-1.5 rounded-xl border border-slate-300 shadow-xs">
                       <button
                         type="button"
                         onClick={() => setPmState({ ...pmState, creditCards: Math.max(0, pmState.creditCards - 1) })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         -
                       </button>
-                      <span className="flex-1 text-center font-extrabold text-sm text-slate-900">
-                        {pmState.creditCards} {pmState.creditCards === 1 ? 'Card' : 'Cards'}
+                      <span className="w-6 text-center font-extrabold text-sm text-slate-900">
+                        {pmState.creditCards}
                       </span>
                       <button
                         type="button"
                         onClick={() => setPmState({ ...pmState, creditCards: pmState.creditCards + 1 })}
-                        className="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-800"
+                        className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-sm flex items-center justify-center transition-colors"
                       >
                         +
                       </button>
@@ -625,48 +550,21 @@ export const StepByStepCalculator: React.FC<Props> = ({
                   </div>
                 </div>
               </div>
-            )}
 
-            {/* Navigation buttons */}
-            <div className="flex items-center justify-between pt-4">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(1)}
-                className="px-6 py-3 border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-2"
-              >
-                <ArrowLeft className="w-4 h-4 text-black" />
-                <span>Back</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrentStep(3)}
-                className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2"
-              >
-                <span>Select Scope & Deliverables</span>
-                <ArrowRight className="w-4 h-4 text-white" />
-              </button>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {/* STEP 3: SCOPE & DELIVERABLES                                        */}
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {currentStep === 3 && (
-          <div className="space-y-8 animate-fadeIn max-w-4xl mx-auto">
-            <div className="text-center space-y-2">
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
-                Modular Scope Selection
-              </span>
-              <h3 className="text-2xl font-black text-slate-900">
-                Step 3: Choose Required Bookkeeping Services
-              </h3>
-              <p className="text-xs text-slate-500">
-                Select the tasks and deliverables your company wants included in this quote.
-              </p>
+          {/* ── STEP 3: SCOPE & DELIVERABLES ACCORDION GRID ── */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                <FileCheck2 className="w-4 h-4 text-blue-600" />
+                <span>Selected Deliverables & Software Scope</span>
+              </label>
+              <span className="text-[11px] font-semibold text-slate-400">Step 3 of 3</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {(serviceType === 'smallBusiness'
                 ? PRICING_CONFIG.smallBusiness.scopeOfWork
                 : PRICING_CONFIG.propertyManagement.scopeOfWork
@@ -680,24 +578,24 @@ export const StepByStepCalculator: React.FC<Props> = ({
                   <div
                     key={scope.id}
                     onClick={() => toggleScopeItem(scope.id)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
+                    className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3 ${
                       isSelected
-                        ? 'bg-blue-50/60 border-blue-500 shadow-xs'
+                        ? 'bg-blue-50/50 border-blue-600 shadow-xs'
                         : 'bg-white border-slate-200 hover:border-slate-300'
                     }`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-md border flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
+                      className={`w-5 h-5 rounded-lg border flex items-center justify-center mt-0.5 shrink-0 transition-colors ${
                         isSelected
                           ? 'bg-blue-600 border-blue-600 text-white'
                           : 'border-slate-300 bg-white'
                       }`}
                     >
-                      {isSelected && <span className="text-xs font-bold">✓</span>}
+                      {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                     </div>
                     <div>
-                      <h4 className="font-bold text-xs text-slate-900">{scope.label}</h4>
-                      <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                      <h4 className="font-extrabold text-xs text-slate-900">{scope.label}</h4>
+                      <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
                         {scope.description}
                       </p>
                     </div>
@@ -705,283 +603,272 @@ export const StepByStepCalculator: React.FC<Props> = ({
                 );
               })}
             </div>
-
-            <div className="flex items-center justify-between pt-4">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(2)}
-                className="px-6 py-3 border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-2"
-              >
-                <ArrowLeft className="w-4 h-4 text-black" />
-                <span>Back</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setCurrentStep(4)}
-                className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2"
-              >
-                <span>Calculate Estimated Range</span>
-                <ArrowRight className="w-4 h-4 text-white" />
-              </button>
-            </div>
           </div>
-        )}
 
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {/* STEP 4: ESTIMATED PRICE RANGE RESULTS                               */}
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {currentStep === 4 && (
-          <div className="space-y-8 animate-fadeIn max-w-4xl mx-auto">
-            {/* Range Highlight Banner */}
-            <div className="p-8 bg-slate-900 text-white rounded-3xl border border-slate-800 shadow-2xl text-center space-y-4 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        </div>
 
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5 text-white" /> Live Configured Estimate
-              </span>
+        {/* ═══════════════════════════════════════════════════════════════════ */}
+        {/* RIGHT COLUMN: STICKY LIVE ESTIMATE & VALUE CARD                    */}
+        {/* ═══════════════════════════════════════════════════════════════════ */}
+        <div className="lg:col-span-5 lg:sticky lg:top-8 space-y-6">
+          
+          {/* Main Price Card */}
+          <div className="bg-slate-950 text-white rounded-3xl border border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden">
+            {/* Background Ambient Glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
 
-              <div>
-                <p className="text-xs uppercase font-bold text-slate-400 tracking-widest mb-1">
-                  Estimated Project Range ({calculation.currency.code})
-                </p>
-                <h3 className="text-4xl sm:text-5xl font-extrabold text-blue-400 tracking-tight">
-                  {calculation.formattedRange}
-                </h3>
-                <p className="text-xs text-slate-300 mt-2 font-medium">
-                  {serviceType === 'smallBusiness' && sbState.serviceType === 'monthly'
-                    ? 'Estimated monthly investment for ongoing full-cycle books'
-                    : 'Estimated fixed-price project scope investment'}
-                </p>
-              </div>
-
-              {/* Disclaimer */}
-              <div className="p-4 bg-slate-800/80 rounded-2xl border border-slate-700 max-w-2xl mx-auto text-slate-300 text-xs leading-relaxed">
-                <p>
-                  <strong>Disclaimer:</strong> {calculation.disclaimer}
-                </p>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(5)}
-                  className="px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2"
-                >
-                  <Send className="w-4 h-4 text-white" />
-                  <span>Request Detailed Quote</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(2)}
-                  className="px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs uppercase tracking-wider rounded-xl border border-slate-700 transition-all"
-                >
-                  Adjust Parameters
-                </button>
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="px-4 py-3.5 text-slate-400 hover:text-white font-bold text-xs transition-colors flex items-center gap-1.5"
-                >
-                  <RotateCcw className="w-3.5 h-3.5 text-white" />
-                  <span>Start Over</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Itemized Calculation Breakdown Table */}
-            <div className="bg-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <h4 className="font-bold text-sm text-slate-900">
-                  Itemized Workload & Scope Breakdown
-                </h4>
-                <span className="text-xs text-slate-500 font-semibold">
-                  Currency: {calculation.currency.code} ({calculation.currency.symbol})
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-blue-400">
+                  Estimated Investment
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-bold">
+                  {currentCurrency.code}
                 </span>
               </div>
 
-              <div className="divide-y divide-slate-200/80">
+              <div className="flex items-baseline gap-2">
+                <h3 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                  {calculation.formattedRange}
+                </h3>
+                <span className="text-xs text-slate-400 font-semibold">
+                  {serviceType === 'smallBusiness' && sbState.serviceType === 'cleanup' ? '/ one-time' : '/ month'}
+                </span>
+              </div>
+
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                {serviceType === 'smallBusiness'
+                  ? sbState.serviceType === 'monthly'
+                    ? 'Includes dedicated certified bookkeeper & monthly reconciliation'
+                    : 'One-time catch-up project to bring all books tax-ready'
+                  : 'Includes 3-way trust reconciliation & monthly owner distribution reports'}
+              </p>
+            </div>
+
+            {/* Itemized Live Breakdown */}
+            <div className="p-4 bg-slate-900/90 rounded-2xl border border-slate-800/80 space-y-2.5 text-xs">
+              <span className="font-bold text-[11px] text-slate-300 uppercase tracking-wider block border-b border-slate-800 pb-2">
+                Itemized Workload Breakdown
+              </span>
+              
+              <div className="space-y-2">
                 {calculation.breakdown.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="py-3 flex items-center justify-between text-xs font-semibold"
-                  >
-                    <span className="text-slate-700">{item.label}</span>
-                    <span className="font-bold text-slate-900 tabular-nums">
+                  <div key={idx} className="flex items-center justify-between text-[11px]">
+                    <span className="text-slate-400">{item.label}</span>
+                    <span className="font-bold text-slate-200 tabular-nums">
                       {item.isBase ? '' : '+'}
                       {item.minFormatted} – {item.maxFormatted}
                     </span>
                   </div>
                 ))}
-
-                <div className="pt-4 flex items-center justify-between text-sm font-extrabold text-slate-900">
-                  <span>Total Estimated Range:</span>
-                  <span className="text-blue-700 text-base tabular-nums">
-                    {calculation.formattedRange}
-                  </span>
-                </div>
               </div>
             </div>
 
-            {/* Flexible Hourly Bookkeeping Alternative Card */}
-            <div className="p-6 bg-blue-50/60 rounded-3xl border border-blue-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <span className="text-[10px] font-bold text-blue-700 uppercase tracking-widest block">
-                  Flexible Alternative
-                </span>
-                <h4 className="font-bold text-sm text-slate-900">
-                  Prefer Flexible Hourly Bookkeeping?
-                </h4>
-                <p className="text-xs text-slate-600 max-w-xl">
-                  Hire our certified bookkeepers for <strong>{formatRangeUSD(10, 20)}/hour</strong> for ad-hoc support, catch-up tasks, or variable monthly hours (5, 10, 20, 40+ hrs).
-                </p>
-              </div>
+            {/* Action Buttons */}
+            <div className="space-y-3 pt-2">
               <button
                 type="button"
-                onClick={() => setCurrentStep(5)}
-                className="px-5 py-2.5 bg-white border border-blue-300 text-blue-700 hover:bg-blue-600 hover:text-white font-bold text-xs rounded-xl shadow-xs transition-all shrink-0"
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-500 active:scale-98 text-white font-extrabold text-xs uppercase tracking-wider shadow-xl shadow-blue-600/30 transition-all flex items-center justify-center gap-2"
               >
-                Inquire About Hourly Rates →
+                <span>Lock In This Price / Get Formal Quote</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="hover:text-white flex items-center gap-1 transition-colors"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  <span>Reset values</span>
+                </button>
+                <span className="flex items-center gap-1 text-slate-400">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>No Long-Term Lock-in</span>
+                </span>
+              </div>
+            </div>
+
+            {/* Guarantees Strip */}
+            <div className="border-t border-slate-800/80 pt-4 grid grid-cols-2 gap-2 text-[10px] text-slate-400 font-semibold">
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <span>CPA-Audited Work</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <span>256-bit Encrypted NDA</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <span>Assigned Senior Tech</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                <span>Response in &lt; 2 Hours</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Hourly Alternative Callout Card */}
+          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+              <Clock className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <h4 className="font-bold text-xs text-slate-900">
+                Need Flexible Hourly Work?
+              </h4>
+              <p className="text-[11px] text-slate-500 leading-relaxed">
+                Hire certified bookkeepers on-demand starting at <strong>{formatRangeUSD(10, 20)}/hour</strong> in blocks of 5, 10, 20, or 40 hours.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="text-[11px] font-bold text-blue-600 hover:underline pt-1 inline-block"
+              >
+                Inquire about hourly blocks →
               </button>
             </div>
           </div>
-        )}
 
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {/* STEP 5: LEAD / DETAILED QUOTE REQUEST                                */}
-        {/* ═════════════════════════════════════════════════════════════════════ */}
-        {currentStep === 5 && (
-          <div className="space-y-6 animate-fadeIn max-w-2xl mx-auto">
-            <div className="text-center space-y-2">
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">
-                Direct Consultation
-              </span>
-              <h3 className="text-2xl font-black text-slate-900">
-                Request a Detailed Quote & Consultation
-              </h3>
-              <p className="text-xs text-slate-500">
-                Submit your customized workload to receive an exact formal proposal within 2 hours.
-              </p>
-            </div>
+        </div>
+
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* POPUP MODAL: REQUEST FORMAL PROPOSAL                                */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {isQuoteModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 relative border border-slate-200">
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setIsQuoteModalOpen(false)}
+              className="absolute top-6 right-6 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
 
             {quoteSubmitted ? (
-              <div className="p-8 bg-emerald-50 border border-emerald-200 rounded-3xl text-center space-y-4">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-2xl mx-auto shadow-lg shadow-emerald-600/20">
+              <div className="text-center space-y-4 py-6">
+                <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-2xl mx-auto shadow-md">
                   ✓
                 </div>
-                <h4 className="text-xl font-bold text-emerald-900">
+                <h3 className="text-2xl font-black text-slate-900">
                   Quote Request Received!
-                </h4>
-                <p className="text-xs text-emerald-800 leading-relaxed max-w-md mx-auto">
-                  Thank you, <strong>{quoteFormData.fullName}</strong>. We have logged your customized parameters for <strong>{serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping'}</strong> ({calculation.formattedRange}). A senior accounting specialist will reach out shortly.
+                </h3>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto">
+                  Thank you, <strong>{quoteFormData.fullName}</strong>. Your customized estimate of <strong>{calculation.formattedRange}</strong> has been logged. An accounting specialist will email you the official onboarding proposal within 2 hours.
                 </p>
-                <div className="pt-2 flex justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={handleReset}
-                    className="px-6 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl"
-                  >
-                    Start New Calculation
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsQuoteModalOpen(false);
+                    setQuoteSubmitted(false);
+                  }}
+                  className="px-8 py-3 bg-slate-900 text-white font-bold text-xs uppercase tracking-wider rounded-xl hover:bg-slate-800 transition-colors"
+                >
+                  Done
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleQuoteSubmit} className="space-y-4 text-xs font-semibold">
-                {/* Snapshot Preview */}
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
-                  <div className="flex justify-between text-slate-600">
-                    <span>Selected Service:</span>
-                    <strong className="text-slate-900">
-                      {serviceType === 'smallBusiness' ? 'Small Business Bookkeeping' : 'Property Management Bookkeeping'}
-                    </strong>
-                  </div>
-                  <div className="flex justify-between text-slate-600">
-                    <span>Configured Range:</span>
-                    <strong className="text-blue-700">{calculation.formattedRange}</strong>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-slate-700 mb-1">Your Full Name *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Sarah Jenkins"
-                      value={quoteFormData.fullName}
-                      onChange={(e) => setQuoteFormData({ ...quoteFormData, fullName: e.target.value })}
-                      className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-slate-700 mb-1">Business Email *</label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="e.g. sarah@acmeproperties.com"
-                      value={quoteFormData.email}
-                      onChange={(e) => setQuoteFormData({ ...quoteFormData, email: e.target.value })}
-                      className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-slate-700 mb-1">Company / Entity Name</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Apex Property Management LLC"
-                      value={quoteFormData.companyName}
-                      onChange={(e) => setQuoteFormData({ ...quoteFormData, companyName: e.target.value })}
-                      className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-slate-700 mb-1">Phone Number</label>
-                    <input
-                      type="tel"
-                      placeholder="e.g. +1 (555) 019-2834"
-                      value={quoteFormData.phone}
-                      onChange={(e) => setQuoteFormData({ ...quoteFormData, phone: e.target.value })}
-                      className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-
+              <div className="space-y-5">
                 <div>
-                  <label className="block text-slate-700 mb-1">Additional Project Details / Software (Optional)</label>
-                  <textarea
-                    rows={3}
-                    placeholder="Mention current accounting software (AppFolio, QuickBooks, Buildium, Xero), backlog timeline, or specific requirements..."
-                    value={quoteFormData.notes}
-                    onChange={(e) => setQuoteFormData({ ...quoteFormData, notes: e.target.value })}
-                    className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
-                  />
+                  <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest block">
+                    Fast & Confidential
+                  </span>
+                  <h3 className="text-xl font-black text-slate-900">
+                    Get Your Official Proposal
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Configured for: <strong>{serviceType === 'smallBusiness' ? 'Small Business' : 'Property Management'}</strong> ({calculation.formattedRange})
+                  </p>
                 </div>
 
-                <div className="flex items-center justify-between pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setCurrentStep(4)}
-                    className="px-6 py-3 border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-2"
-                  >
-                    <ArrowLeft className="w-4 h-4 text-black" />
-                    <span>Back to Estimate</span>
-                  </button>
+                <form onSubmit={handleQuoteSubmit} className="space-y-4 text-xs font-semibold">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-slate-700 mb-1">Full Name *</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Sarah Jenkins"
+                        value={quoteFormData.fullName}
+                        onChange={(e) => setQuoteFormData({ ...quoteFormData, fullName: e.target.value })}
+                        className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-700 mb-1">Business Email *</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="e.g. sarah@company.com"
+                        value={quoteFormData.email}
+                        onChange={(e) => setQuoteFormData({ ...quoteFormData, email: e.target.value })}
+                        className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-slate-700 mb-1">Company / Entity Name</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Apex Property LLC"
+                        value={quoteFormData.companyName}
+                        onChange={(e) => setQuoteFormData({ ...quoteFormData, companyName: e.target.value })}
+                        className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-slate-700 mb-1">Phone Number</label>
+                      <input
+                        type="tel"
+                        placeholder="e.g. +1 (555) 019-2834"
+                        value={quoteFormData.phone}
+                        onChange={(e) => setQuoteFormData({ ...quoteFormData, phone: e.target.value })}
+                        className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 mb-1">Specific Software / Notes (Optional)</label>
+                    <textarea
+                      rows={3}
+                      placeholder="e.g. AppFolio, QuickBooks Online, 2 years behind on taxes, etc."
+                      value={quoteFormData.notes}
+                      onChange={(e) => setQuoteFormData({ ...quoteFormData, notes: e.target.value })}
+                      className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
                   <button
                     type="submit"
-                    className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/25 transition-all flex items-center gap-2"
+                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2"
                   >
-                    <Send className="w-4 h-4 text-white" />
-                    <span>Submit Detailed Quote Request</span>
+                    <Send className="w-4 h-4" />
+                    <span>Send My Formal Proposal</span>
                   </button>
-                </div>
-              </form>
+
+                  <p className="text-[10px] text-center text-slate-400">
+                    🔒 Strict 2-way NDA protected. We never sell or share your contact data.
+                  </p>
+                </form>
+              </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
     </div>
   );
 };
