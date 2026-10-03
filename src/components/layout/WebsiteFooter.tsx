@@ -67,11 +67,11 @@ export const WebsiteFooter: React.FC = () => {
               </p>
               <p className="flex items-center gap-2">
                 <Mail className="w-3.5 h-3.5 text-white shrink-0" />
-                <a href="mailto:nexa@gmail.com" className="hover:text-white">nexa@gmail.com</a>
+                <a href="mailto:steadyledgerco98@gmail.com" className="hover:text-white">steadyledgerco98@gmail.com</a>
               </p>
               <p className="flex items-center gap-2">
                 <Phone className="w-3.5 h-3.5 text-white shrink-0" />
-                <a href="tel:03345786667" className="hover:text-white">03345786667</a>
+                <a href="tel:+17322771592" className="hover:text-white">+1 732-277-1592</a>
               </p>
             </div>
           </div>

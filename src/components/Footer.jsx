@@ -103,7 +103,7 @@ export function Footer() {
             </p>
             <div className="text-xs text-gray-400 space-y-1">
               <p>📍 Global Support: USA • Canada • Australia • UK</p>
-              <p>📞 <a href="tel:03345786667" className="hover:text-white">03345786667</a> • ✉️ <a href="mailto:nexa@gmail.com" className="hover:text-white">nexa@gmail.com</a></p>
+              <p>📞 <a href="tel:+17322771592" className="hover:text-white">+1 732-277-1592</a> • ✉️ <a href="mailto:steadyledgerco98@gmail.com" className="hover:text-white">steadyledgerco98@gmail.com</a></p>
             </div>
           </div>
 

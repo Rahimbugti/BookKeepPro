@@ -4,7 +4,7 @@ import { Mail, Info, Send } from 'lucide-react';
 // ─── Configuration ────────────────────────────────────────────────────────────
 // Change this to your actual business email address.
 // This will be the "To:" address in every quote email that users send.
-const RECIPIENT_EMAIL = 'nexa@gmail.com';
+const RECIPIENT_EMAIL = 'steadyledgerco98@gmail.com';
 
 /**
  * Builds a mailto: URI with all quote details pre-filled in the email body.

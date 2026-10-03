@@ -476,7 +476,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
               </p>
 
               <p>
-                <strong>Features:</strong> One-page layout — hero, services, process, pricing, stats, FAQ, contact. Pain-point cards with dashboard-style graphics. Three-tier pricing section. FAQ accordion. Contact form, ready to wire to your inbox (<code className="text-white bg-white/10 px-1.5 py-0.5 rounded">nexa@gmail.com</code>). Privacy Policy, Terms, and 404 pages included. Fully responsive — desktop, tablet, and phone. Easy to customize: swap the name, photos, and copy in minutes.
+                <strong>Features:</strong> One-page layout — hero, services, process, pricing, stats, FAQ, contact. Pain-point cards with dashboard-style graphics. Three-tier pricing section. FAQ accordion. Contact form, ready to wire to your inbox (<code className="text-white bg-white/10 px-1.5 py-0.5 rounded">steadyledgerco98@gmail.com</code>). Privacy Policy, Terms, and 404 pages included. Fully responsive — desktop, tablet, and phone. Easy to customize: swap the name, photos, and copy in minutes.
               </p>
 
               <p className="font-bold text-white pt-2">
@@ -686,10 +686,10 @@ export const TaxConsultantMarketplace: React.FC = () => {
 
             <div className="flex items-center gap-3">
               <a
-                href="tel:03345786667"
+                href="tel:+17322771592"
                 className="hidden sm:flex items-center gap-1.5 text-slate-300 hover:text-white font-bold text-xs"
               >
-                <Phone className="w-3.5 h-3.5" /> 03345786667
+                <Phone className="w-3.5 h-3.5" /> +1 732-277-1592
               </a>
               <button
                 type="button"
@@ -726,8 +726,8 @@ export const TaxConsultantMarketplace: React.FC = () => {
                   BookKeepPro
                 </div>
                 <div className="flex items-center gap-4 text-xs font-semibold">
-                  <a href="mailto:nexa@gmail.com" className="text-slate-600 hover:text-slate-900 hidden sm:inline">
-                    nexa@gmail.com
+                  <a href="mailto:steadyledgerco98@gmail.com" className="text-slate-600 hover:text-slate-900 hidden sm:inline">
+                    steadyledgerco98@gmail.com
                   </a>
                   <button
                     type="button"
@@ -763,10 +763,10 @@ export const TaxConsultantMarketplace: React.FC = () => {
                       Book 20-Min Intro Call
                     </button>
                     <a
-                      href="tel:03345786667"
+                      href="tel:+17322771592"
                       className="px-6 py-3.5 border border-slate-300 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-50 flex items-center gap-2"
                     >
-                      <Phone className="w-3.5 h-3.5" /> 03345786667
+                      <Phone className="w-3.5 h-3.5" /> +1 732-277-1592
                     </a>
                   </div>
                 </div>
@@ -842,9 +842,9 @@ export const TaxConsultantMarketplace: React.FC = () => {
                 <div className="pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
                   <span className="font-serif font-bold text-slate-900">BookKeepPro</span>
                   <div className="flex items-center gap-4">
-                    <a href="mailto:nexa@gmail.com" className="hover:text-slate-900">nexa@gmail.com</a>
+                    <a href="mailto:steadyledgerco98@gmail.com" className="hover:text-slate-900">steadyledgerco98@gmail.com</a>
                     <span>•</span>
-                    <a href="tel:03345786667" className="hover:text-slate-900">03345786667</a>
+                    <a href="tel:+17322771592" className="hover:text-slate-900">+1 732-277-1592</a>
                   </div>
                 </div>
               </div>
@@ -882,7 +882,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
                 </div>
                 <h4 className="font-bold text-base text-emerald-900">Call Scheduled!</h4>
                 <p className="text-xs text-emerald-800 leading-relaxed">
-                  Thank you, <strong>{callFormData.name}</strong>. We've sent confirmation to <strong>{callFormData.email}</strong>. Our senior consultant will call you at <strong>{callFormData.phone || '03345786667'}</strong>.
+                  Thank you, <strong>{callFormData.name}</strong>. We've sent confirmation to <strong>{callFormData.email}</strong>. Our senior consultant will call you at <strong>{callFormData.phone || '+1 732-277-1592'}</strong>.
                 </p>
                 <button
                   type="button"
@@ -926,7 +926,7 @@ export const TaxConsultantMarketplace: React.FC = () => {
                     <input
                       type="tel"
                       required
-                      placeholder="03345786667"
+                      placeholder="+1 732-277-1592"
                       value={callFormData.phone}
                       onChange={(e) => setCallFormData({ ...callFormData, phone: e.target.value })}
                       className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-[#0099FF]"

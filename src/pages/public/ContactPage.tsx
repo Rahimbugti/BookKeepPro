@@ -275,8 +275,8 @@ export const ContactPage: React.FC = () => {
                   <Mail className="w-4 h-4 text-white shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-white block">Email:</strong>
-                    <a href="mailto:nexa@gmail.com" className="hover:text-blue-400">
-                      nexa@gmail.com
+                    <a href="mailto:steadyledgerco98@gmail.com" className="hover:text-blue-400">
+                      steadyledgerco98@gmail.com
                     </a>
                   </div>
                 </div>
@@ -285,8 +285,8 @@ export const ContactPage: React.FC = () => {
                   <Phone className="w-4 h-4 text-white shrink-0 mt-0.5" />
                   <div>
                     <strong className="text-white block">Phone / WhatsApp:</strong>
-                    <a href="tel:03345786667" className="hover:text-blue-400">
-                      03345786667
+                    <a href="tel:+17322771592" className="hover:text-blue-400">
+                      +1 732-277-1592
                     </a>
                   </div>
                 </div>

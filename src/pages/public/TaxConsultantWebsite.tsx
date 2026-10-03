@@ -296,12 +296,12 @@ export const TaxConsultantWebsite: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-4">
-              <a href="mailto:nexa@gmail.com" className="hover:text-slate-300 transition-colors flex items-center gap-1">
-                <Mail className="w-3 h-3 text-white" /> nexa@gmail.com
+              <a href="mailto:steadyledgerco98@gmail.com" className="hover:text-slate-300 transition-colors flex items-center gap-1">
+                <Mail className="w-3 h-3 text-white" /> steadyledgerco98@gmail.com
               </a>
               <span className="text-slate-700">|</span>
-              <a href="tel:03345786667" className="font-bold text-white hover:underline flex items-center gap-1">
-                <Phone className="w-3 h-3 text-white" /> 03345786667
+              <a href="tel:+17322771592" className="font-bold text-white hover:underline flex items-center gap-1">
+                <Phone className="w-3 h-3 text-white" /> +1 732-277-1592
               </a>
             </div>
           </div>
@@ -720,11 +720,11 @@ export const TaxConsultantWebsite: React.FC = () => {
               </p>
               <div className="pt-2">
                 <a
-                  href="tel:03345786667"
+                  href="tel:+17322771592"
                   className="inline-flex items-center gap-2 text-xs font-bold text-white hover:underline"
                 >
                   <Phone className="w-3.5 h-3.5 text-white" />
-                  <span>Direct phone line: 03345786667</span>
+                  <span>Direct phone line: +1 732-277-1592</span>
                 </a>
               </div>
             </div>
@@ -1012,14 +1012,14 @@ export const TaxConsultantWebsite: React.FC = () => {
               <div className="space-y-3 pt-2 text-xs">
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-black" />
-                  <a href="mailto:nexa@gmail.com" className="font-bold text-black hover:underline">
-                    nexa@gmail.com
+                  <a href="mailto:steadyledgerco98@gmail.com" className="font-bold text-black hover:underline">
+                    steadyledgerco98@gmail.com
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-black" />
-                  <a href="tel:03345786667" className="font-bold text-black hover:underline">
-                    03345786667 (Direct / WhatsApp)
+                  <a href="tel:+17322771592" className="font-bold text-black hover:underline">
+                    +1 732-277-1592 (Direct / WhatsApp)
                   </a>
                 </div>
                 <div className="flex items-center gap-3 text-slate-500">
@@ -1108,13 +1108,13 @@ export const TaxConsultantWebsite: React.FC = () => {
                   </button>
                 </div>
                 <div><a href="#faq" className="hover:text-white transition-colors">FAQ</a></div>
-                <div><a href="mailto:nexa@gmail.com" className="hover:text-white transition-colors">Support</a></div>
+                <div><a href="mailto:steadyledgerco98@gmail.com" className="hover:text-white transition-colors">Support</a></div>
               </div>
 
               <div className="space-y-2">
                 <span className="text-white font-bold block text-[11px] uppercase tracking-wider">Contact</span>
-                <div><a href="mailto:nexa@gmail.com" className="hover:text-white transition-colors">nexa@gmail.com</a></div>
-                <div><a href="tel:03345786667" className="hover:text-white transition-colors">03345786667</a></div>
+                <div><a href="mailto:steadyledgerco98@gmail.com" className="hover:text-white transition-colors">steadyledgerco98@gmail.com</a></div>
+                <div><a href="tel:+17322771592" className="hover:text-white transition-colors">+1 732-277-1592</a></div>
               </div>
             </div>
           </div>
@@ -1199,7 +1199,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                     <h4 className="font-bold text-slate-900 text-sm">4. Contact & Data Officer</h4>
                     <p>
-                      For data inquiries or deletion requests, contact our compliance team directly at <strong>nexa@gmail.com</strong> or phone <strong>03345786667</strong>.
+                      For data inquiries or deletion requests, contact our compliance team directly at <strong>steadyledgerco98@gmail.com</strong> or phone <strong>+1 732-277-1592</strong>.
                     </p>
                   </div>
                 </>
@@ -1229,7 +1229,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                     <h4 className="font-bold text-slate-900 text-sm">4. Direct Support & Communication</h4>
                     <p>
-                      Clients receive dedicated senior bookkeeper support via email (<strong>nexa@gmail.com</strong>) and direct line/WhatsApp (<strong>03345786667</strong>) with a guaranteed response turnaround within 24 business hours.
+                      Clients receive dedicated senior bookkeeper support via email (<strong>steadyledgerco98@gmail.com</strong>) and direct line/WhatsApp (<strong>+1 732-277-1592</strong>) with a guaranteed response turnaround within 24 business hours.
                     </p>
                   </div>
                 </>
@@ -1356,7 +1356,7 @@ export const TaxConsultantWebsite: React.FC = () => {
                       type="tel"
                       name="phone"
                       required
-                      placeholder="03345786667"
+                      placeholder="+1 732-277-1592"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       className="w-full p-3 rounded-xl border border-slate-300 font-normal focus:ring-2 focus:ring-black outline-none"

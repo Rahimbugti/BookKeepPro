@@ -31,9 +31,9 @@ export function Header({ onGetStarted, onNavigate }) {
 
           {/* Right Utility Contact & Login */}
           <div className="flex items-center gap-6">
-            <span className="text-white/80">Call: <a href="tel:03345786667" className="text-white font-bold hover:underline">03345786667</a></span>
+            <span className="text-white/80">Call: <a href="tel:+17322771592" className="text-white font-bold hover:underline">+1 732-277-1592</a></span>
             <span className="text-white/40">•</span>
-            <a href="mailto:nexa@gmail.com" className="text-white/80 hover:text-[#FFC700] transition-colors">nexa@gmail.com</a>
+            <a href="mailto:steadyledgerco98@gmail.com" className="text-white/80 hover:text-[#FFC700] transition-colors">steadyledgerco98@gmail.com</a>
             <span className="text-white/40">•</span>
             <div className="flex items-center gap-1.5 text-white font-bold cursor-pointer hover:text-[#FFC700]">
               <span className="w-4 h-4 rounded-full bg-[#FFC700] text-[#0E0E0E] flex items-center justify-center text-[10px] font-black">👤</span>

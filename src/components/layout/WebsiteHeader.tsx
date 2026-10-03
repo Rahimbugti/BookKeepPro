@@ -36,17 +36,17 @@ export const WebsiteHeader: React.FC = () => {
 
           <div className="flex items-center gap-4">
             <a
-              href="mailto:nexa@gmail.com"
+              href="mailto:steadyledgerco98@gmail.com"
               className="hover:text-blue-400 transition-colors flex items-center gap-1"
             >
-              <Mail className="w-3 h-3 text-white" /> nexa@gmail.com
+              <Mail className="w-3 h-3 text-white" /> steadyledgerco98@gmail.com
             </a>
             <span className="text-slate-600">|</span>
             <a
-              href="tel:03345786667"
+              href="tel:+17322771592"
               className="font-bold text-blue-400 hover:underline flex items-center gap-1"
             >
-              <Phone className="w-3 h-3 text-white" /> 03345786667
+              <Phone className="w-3 h-3 text-white" /> +1 732-277-1592
             </a>
           </div>
         </div>
