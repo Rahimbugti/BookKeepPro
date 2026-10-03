@@ -239,36 +239,36 @@ export const StepByStepCalculator: React.FC<Props> = ({
   return (
     <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden text-slate-900 transition-all">
       {/* ── Top Header & Tab Navigation ── */}
-      <div className="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white p-6 sm:p-8 border-b border-slate-800">
+      <div className="bg-white text-slate-900 p-6 sm:p-8 border-b border-slate-200">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-400 text-[11px] font-bold tracking-wide uppercase">
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-bold tracking-wide uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
               <span>Real-Time Pricing Engine</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
               Customize Your Bookkeeping Plan
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-xl">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-xl">
               Select your business model, transaction volume, and service scope below for an instant, transparent estimate.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 self-start lg:self-auto bg-slate-800/90 backdrop-blur p-2 rounded-2xl border border-slate-700/80 shadow-inner">
-            <span className="text-xs font-semibold text-slate-300 pl-2">Currency:</span>
-            <CountryCurrencySelector variant="dark" />
+          <div className="flex items-center gap-3 self-start lg:self-auto bg-slate-50 p-2 rounded-2xl border border-slate-200 shadow-xs">
+            <span className="text-xs font-semibold text-slate-700 pl-2">Currency:</span>
+            <CountryCurrencySelector variant="inline" />
           </div>
         </div>
 
         {/* ── Main Category Segment Tabs ── */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800 max-w-2xl">
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 p-1.5 bg-slate-100 rounded-2xl border border-slate-200 max-w-2xl">
           <button
             type="button"
             onClick={() => setServiceType('smallBusiness')}
             className={`flex items-center justify-center gap-3 py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 ${
               serviceType === 'smallBusiness'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white'
             }`}
           >
             <Briefcase className="w-4 h-4 shrink-0" />
@@ -280,8 +280,8 @@ export const StepByStepCalculator: React.FC<Props> = ({
             onClick={() => setServiceType('propertyManagement')}
             className={`flex items-center justify-center gap-3 py-3.5 px-5 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 ${
               serviceType === 'propertyManagement'
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white'
             }`}
           >
             <Building2 className="w-4 h-4 shrink-0" />
